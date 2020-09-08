@@ -12,6 +12,11 @@
 
     <item
         android:id="@+id/bot_nav_3"
+        android:icon="@drawable/ic_phone"
+        android:title="ویژه کنکوری ها" />
+
+    <item
+        android:id="@+id/bot_nav_4"
         android:icon="@drawable/ic_acount"
         android:title="تنظیمات" />
 </menu>

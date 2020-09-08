@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment {
     public void countDownStart() {
         handler = new Handler();
         runnable = new Runnable() {
+            @SuppressLint({"DefaultLocale", "SetTextI18n"})
             @Override
             public void run() {
                 handler.postDelayed(this, 1000);
@@ -45,7 +46,7 @@ public class HomeFragment extends Fragment {
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(
                             "yyyy-MM-dd");
                     // Please here set your event date//YYYY-MM-DD
-                    Date futureDate = dateFormat.parse("2020-12-2");
+                    Date futureDate = dateFormat.parse("2021-6-2");
                     Date currentDate = new Date();
                     if (!currentDate.after(futureDate)) {
                         long diff = futureDate.getTime() + (8 * 60 * 60 * 1000)
@@ -69,7 +70,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         };
-        handler.postDelayed(runnable, 1 * 1000);
+        handler.postDelayed(runnable, 1000);
     }
 
 }
