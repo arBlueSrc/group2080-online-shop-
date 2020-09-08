@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    main activity-->
+    <dimen name="corner">8dp</dimen>
+    <dimen name="main_box">2dp</dimen>
+    <dimen name="main_box_txtmargin">6dp</dimen>
+    <dimen name="main_box_imgpadding">6dp</dimen>
+    <dimen name="main_hor_scroll_padding">8dp</dimen>
+    <dimen name="card_width">150dp</dimen>
+    <dimen name="card_height">200dp</dimen>
+    <dimen name="comment_redius">32dp</dimen>
+    <dimen name="button_redius">12dp</dimen>
+    <dimen name="edt_redius">12dp</dimen>
+
+</resources>

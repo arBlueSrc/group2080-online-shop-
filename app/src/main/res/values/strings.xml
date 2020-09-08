@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Digikala</string>
+
+    <!--    navigation_menu-->
+    <string name="nav_site">سایت 2080</string>
+    <string name="nav_saved">برگزیده ها</string>
+    <string name="nav_my_ravandnama">روندنمای من</string>
+    <string name="nav_karsanj">کارسنج</string>
+    <string name="login">ورود</string>
+    <string name="btnlogon">ورود</string>
+    <string name="todo">TODO</string>
+    <string name="sabtnam">ثبت نام</string>
+    <string name="password">رمز عبور</string>
+    <string name="phone_number">شماره موبایل</string>
+    <string name="register_button_main">ثبت نام (ظرفیت محدود)</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

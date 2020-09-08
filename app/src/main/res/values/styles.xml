@@ -1,0 +1,15 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="fontFamily">@font/font2</item>
+    </style>
+
+    <style name="TextAppearance.Widget.AppCompat.Toolbar.Subtitle." parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle." tools:ignore="ResourceCycle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bot_nav_1"
+        android:icon="@drawable/ic_key"
+        android:title="مشاوره" />
+
+    <item
+        android:id="@+id/bot_nav_2"
+        android:icon="@drawable/ic_menu"
+        android:title="ثبت نام" />
+
+    <item
+        android:id="@+id/bot_nav_3"
+        android:icon="@drawable/ic_acount"
+        android:title="تنظیمات" />
+</menu>
