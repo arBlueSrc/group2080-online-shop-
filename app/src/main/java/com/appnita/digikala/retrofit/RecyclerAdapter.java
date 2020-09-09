@@ -14,10 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
 
     Context context;
     List<RecyclerObjectClass> list;
@@ -38,7 +39,8 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         RecyclerObjectClass recyclerObject = list.get(position);
-        holder.imageview.setImageResource(R.drawable.ic_launcher_background);
+//        holder.imageview.setImageResource(R.drawable.ic_launcher_background);
+        Picasso.get().load(recyclerObject.getImage()).into(holder.imageview);
         holder.title.setText(recyclerObject.getTitle());
         holder.content.setText(recyclerObject.getContent());
 

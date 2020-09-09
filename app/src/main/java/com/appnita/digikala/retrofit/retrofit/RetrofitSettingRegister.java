@@ -27,11 +27,6 @@ public class RetrofitSettingRegister {
 
     public RetrofitSettingRegister(String BASE_URL){
 
-//        OkHttpClient okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient();
-
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
         LoggingInterceptor interceptor1 = new LoggingInterceptor.Builder()
                 .loggable(BuildConfig.DEBUG)
                 .setLevel(Level.BASIC)

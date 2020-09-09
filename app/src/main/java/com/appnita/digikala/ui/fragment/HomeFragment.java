@@ -11,11 +11,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentHomeBinding;
+import com.appnita.digikala.retrofit.RecyclerAdapter;
+import com.appnita.digikala.retrofit.RecyclerObjectClass;
+import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
+import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
@@ -29,10 +39,57 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
 
+        //timer for event
         countDownStart();
+
+        //retrofit setting
+        RetrofitConfiguration();
 
 
         return binding.getRoot();
+    }
+
+    private void RetrofitConfiguration() {
+        //server config
+        RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
+        ApiService apiService = retrofit.getApiService();
+
+
+        Call<NewsRetrofit> call = apiService.news(393);
+        call.enqueue(new Callback<NewsRetrofit>() {
+            @Override
+            public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
+                if (response.isSuccessful()) {
+                    List<NewsRetrofit.posts> list = new ArrayList<>();
+                    list = response.body().getNews();
+
+                    List<RecyclerObjectClass> rvList = new ArrayList<>();
+
+                    for (int i=0; i<list.size();i++){
+                        RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                        rvOBJ.setTitle(list.get(i).getTitle());
+                        rvOBJ.setContent(list.get(i).getContent());
+                        rvOBJ.setImage(list.get(i).getThumbnail());
+                        rvList.add(rvOBJ);
+                    }
+
+                    //recycler view
+                    RecyclerViewConfiquration(rvList);
+                } else {
+                    Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewsRetrofit> call, Throwable t) {
+                Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void RecyclerViewConfiquration(List<RecyclerObjectClass> list) {
+        RecyclerAdapter adapter = new RecyclerAdapter(getContext(),list);
+        binding.rvNews.setAdapter(adapter);
     }
 
     public void countDownStart() {

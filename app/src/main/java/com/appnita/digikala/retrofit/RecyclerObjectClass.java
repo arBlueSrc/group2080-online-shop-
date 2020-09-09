@@ -5,7 +5,7 @@ import android.widget.ImageView;
 
 public class RecyclerObjectClass {
     private int id;
-    private ImageView image;
+    private String image;
     private String title;
     private String content;
 
@@ -34,11 +34,11 @@ public class RecyclerObjectClass {
         this.content = content;
     }
 
-    public ImageView getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(ImageView image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }
