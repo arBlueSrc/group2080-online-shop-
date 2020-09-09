@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/bot_nav_1"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_key"
+        android:orderInCategory="1"
+        app:showAsAction="always"
         android:title="مشاوره" />
 
     <item
-        android:id="@+id/bot_nav_2"
+        android:id="@+id/twoFragment"
         android:icon="@drawable/ic_menu"
+        android:orderInCategory="2"
+        app:showAsAction="always"
         android:title="ثبت نام" />
 
     <item
-        android:id="@+id/bot_nav_3"
+        android:id="@+id/threeFragment"
         android:icon="@drawable/ic_phone"
+        android:orderInCategory="3"
+        app:showAsAction="always"
         android:title="ویژه کنکوری ها" />
 
     <item
-        android:id="@+id/bot_nav_4"
+        android:id="@+id/fourFragment"
         android:icon="@drawable/ic_acount"
+        android:orderInCategory="4"
+        app:showAsAction="always"
         android:title="تنظیمات" />
 </menu>

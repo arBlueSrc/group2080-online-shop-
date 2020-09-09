@@ -7,6 +7,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,9 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appnita.digikala.R;
+import com.appnita.digikala.databinding.ActivityMainMajorBinding;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
 import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
 import com.appnita.digikala.retrofit.retrofit.WooRetrofit;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -43,12 +48,15 @@ public class MainActivity extends AppCompatActivity {
     RetrofitSetting retrofit;
     ApiService apiService;
 
+    ActivityMainMajorBinding binding;
+
 
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_major);
+        binding = ActivityMainMajorBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         toolbar = findViewById(R.id.toolbarmain);
         setSupportActionBar(toolbar);
@@ -56,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
 
+        //bottom navigation
+        SetupBottomNavigation();
 
         //navigation drawer
         SetupNavigation();
@@ -66,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
         //retrofit config
         RerofitSetting();
 
+
+    }
+
+    private void SetupBottomNavigation() {
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_container);
+        NavigationUI.setupWithNavController(binding.bottomNavigationView, navHostFragment.getNavController());
 
     }
 
@@ -114,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void SharedPreferencesSetting() {
         sharedPreferences = getSharedPreferences("userNameShared", Context.MODE_PRIVATE);
-        Toast.makeText(this, sharedPreferences.getString("username","nothing"), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, sharedPreferences.getString("username", "nothing"), Toast.LENGTH_SHORT).show();
         if (sharedPreferences.getString("username", "no").equals("no")) {
             headerLogedIn.setVisibility(View.GONE);
             headerLogin.setVisibility(View.VISIBLE);
@@ -125,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         headerLogin.setOnClickListener(v -> {
-            startActivityForResult(new Intent(MainActivity.this, Login.class),0);
+            startActivityForResult(new Intent(MainActivity.this, Login.class), 0);
         });
     }
 
@@ -156,27 +172,5 @@ public class MainActivity extends AppCompatActivity {
             headerLogin.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.site:
-                Toast.makeText(this, "hi", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.saved_voice:
-                Toast.makeText(this, "hi", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.ravandnama:
-                Toast.makeText(this, "hi", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.karsanj:
-                Toast.makeText(this, "hi", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-
 
 }
