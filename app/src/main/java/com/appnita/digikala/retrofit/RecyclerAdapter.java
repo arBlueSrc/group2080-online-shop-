@@ -40,7 +40,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         RecyclerObjectClass recyclerObject = list.get(position);
 //        holder.imageview.setImageResource(R.drawable.ic_launcher_background);
-        Picasso.get().load(recyclerObject.getImage()).into(holder.imageview);
+        Picasso.get()
+                .load(recyclerObject.getImage())
+                .placeholder(R.drawable.error)
+                .into(holder.imageview);
         holder.title.setText(recyclerObject.getTitle());
         holder.content.setText(recyclerObject.getContent());
 
