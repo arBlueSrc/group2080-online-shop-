@@ -48,12 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
-
     RetrofitSetting retrofit;
     ApiService apiService;
-    List<ArticleRetrofit> list = new ArrayList<>();
-
-    List<Articles> lastArticles1 = new ArrayList<>();
 
 
     @SuppressLint("WrongViewCast")
@@ -69,38 +65,19 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigation_view);
 
 
-
         //navigation drawer
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        ActionBarDrawerToggle drawertoggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
-        drawertoggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.addDrawerListener(drawertoggle);
-        drawertoggle.syncState();
-
-        View header = navigationView.getHeaderView(0);
-        headerLogin = header.findViewById(R.id.btn_login);
-        headerLogedIn = header.findViewById(R.id.btn_loged_in);
+        SetupNavigation();
 
         //shared preference
-        sharedPreferences = getSharedPreferences("userNameShared", Context.MODE_PRIVATE);
-        Toast.makeText(this, sharedPreferences.getString("username","nothing"), Toast.LENGTH_SHORT).show();
-        if (sharedPreferences.getString("username", "no").equals("no")) {
-            headerLogedIn.setVisibility(View.GONE);
-            headerLogin.setVisibility(View.VISIBLE);
-        } else {
-            headerLogedIn.setText("0"+sharedPreferences.getString("username", "noname"));
-            headerLogedIn.setVisibility(View.VISIBLE);
-            headerLogin.setVisibility(View.GONE);
-        }
+        SharedPreferencesSetting();
 
-        headerLogin.setOnClickListener(v -> {
-                startActivityForResult(new Intent(MainActivity.this, Login.class),0);
-        });
+        //retrofit config
+        RerofitSetting();
 
 
-        //server config
+    }
+
+    private void RerofitSetting() {
         retrofit = new RetrofitSetting("http://192.168.0.3/wordpress/wp-json/wc/v3/");
         apiService = retrofit.getApiService();
 
@@ -141,8 +118,37 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "shit" + t, Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
+    private void SharedPreferencesSetting() {
+        sharedPreferences = getSharedPreferences("userNameShared", Context.MODE_PRIVATE);
+        Toast.makeText(this, sharedPreferences.getString("username","nothing"), Toast.LENGTH_SHORT).show();
+        if (sharedPreferences.getString("username", "no").equals("no")) {
+            headerLogedIn.setVisibility(View.GONE);
+            headerLogin.setVisibility(View.VISIBLE);
+        } else {
+            headerLogedIn.setText("0" + sharedPreferences.getString("username", "noname"));
+            headerLogedIn.setVisibility(View.VISIBLE);
+            headerLogin.setVisibility(View.GONE);
+        }
 
+        headerLogin.setOnClickListener(v -> {
+            startActivityForResult(new Intent(MainActivity.this, Login.class),0);
+        });
+    }
+
+    private void SetupNavigation() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBarDrawerToggle drawertoggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
+        drawertoggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.addDrawerListener(drawertoggle);
+        drawertoggle.syncState();
+
+        View header = navigationView.getHeaderView(0);
+        headerLogin = header.findViewById(R.id.btn_login);
+        headerLogedIn = header.findViewById(R.id.btn_loged_in);
     }
 
     @Override
