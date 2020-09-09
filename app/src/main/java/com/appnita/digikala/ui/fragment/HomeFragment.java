@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.appnita.digikala.databinding.FragmentHomeBinding;
-import com.appnita.digikala.retrofit.RecyclerAdapter;
+import com.appnita.digikala.retrofit.RecyclerAdapterClass;
+import com.appnita.digikala.retrofit.RecyclerAdapterConsult;
+import com.appnita.digikala.retrofit.RecyclerAdapterNews;
 import com.appnita.digikala.retrofit.RecyclerObjectClass;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
 import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
@@ -43,13 +45,15 @@ public class HomeFragment extends Fragment {
         countDownStart();
 
         //retrofit setting
-        RetrofitConfiguration();
+        RetrofitConfigurationNews();
+        RetrofitConfigurationConsult();
+        RetrofitConfigurationClass();
 
 
         return binding.getRoot();
     }
 
-    private void RetrofitConfiguration() {
+    private void RetrofitConfigurationNews() {
         //server config
         RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
         ApiService apiService = retrofit.getApiService();
@@ -74,7 +78,81 @@ public class HomeFragment extends Fragment {
                     }
 
                     //recycler view
-                    RecyclerViewConfiquration(rvList);
+                    RecyclerViewConfiqurationNews(rvList);
+                } else {
+                    Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewsRetrofit> call, Throwable t) {
+                Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void RetrofitConfigurationConsult() {
+        //server config
+        RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
+        ApiService apiService = retrofit.getApiService();
+
+
+        Call<NewsRetrofit> call = apiService.news(388);
+        call.enqueue(new Callback<NewsRetrofit>() {
+            @Override
+            public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
+                if (response.isSuccessful()) {
+                    List<NewsRetrofit.posts> list = new ArrayList<>();
+                    list = response.body().getNews();
+
+                    List<RecyclerObjectClass> rvList = new ArrayList<>();
+
+                    for (int i=0; i<list.size();i++){
+                        RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                        rvOBJ.setTitle(list.get(i).getTitle());
+                        rvOBJ.setContent(list.get(i).getContent());
+                        rvOBJ.setImage(list.get(i).getThumbnail());
+                        rvList.add(rvOBJ);
+                    }
+
+                    //recycler view
+                    RecyclerViewConfiqurationConsult(rvList);
+                } else {
+                    Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewsRetrofit> call, Throwable t) {
+                Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void RetrofitConfigurationClass() {
+        //server config
+        RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
+        ApiService apiService = retrofit.getApiService();
+
+
+        Call<NewsRetrofit> call = apiService.news(394);
+        call.enqueue(new Callback<NewsRetrofit>() {
+            @Override
+            public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
+                if (response.isSuccessful()) {
+                    List<NewsRetrofit.posts> list = new ArrayList<>();
+                    list = response.body().getNews();
+
+                    List<RecyclerObjectClass> rvList = new ArrayList<>();
+
+                    for (int i=0; i<list.size();i++){
+                        RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                        rvOBJ.setTitle(list.get(i).getTitle());
+                        rvOBJ.setContent(list.get(i).getContent());
+                        rvOBJ.setImage(list.get(i).getThumbnail());
+                        rvList.add(rvOBJ);
+                    }
+
+                    //recycler view
+                    RecyclerViewConfiqurationClass(rvList);
                 } else {
                     Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
                 }
@@ -87,10 +165,20 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void RecyclerViewConfiquration(List<RecyclerObjectClass> list) {
-        RecyclerAdapter adapter = new RecyclerAdapter(getContext(),list);
+    private void RecyclerViewConfiqurationNews(List<RecyclerObjectClass> list) {
+        RecyclerAdapterNews adapter = new RecyclerAdapterNews(getContext(),list);
         binding.rvNews.setAdapter(adapter);
     }
+    private void RecyclerViewConfiqurationConsult(List<RecyclerObjectClass> list) {
+        RecyclerAdapterConsult adapter = new RecyclerAdapterConsult(getContext(),list);
+        binding.rvConsult.setAdapter(adapter);
+    }
+    private void RecyclerViewConfiqurationClass(List<RecyclerObjectClass> list) {
+        RecyclerAdapterClass adapter = new RecyclerAdapterClass(getContext(),list);
+        binding.rvClass.setAdapter(adapter);
+    }
+
+
 
     public void countDownStart() {
         handler = new Handler();
