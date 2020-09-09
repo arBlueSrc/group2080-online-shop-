@@ -6,8 +6,8 @@
     <dimen name="main_box_txtmargin">6dp</dimen>
     <dimen name="main_box_imgpadding">6dp</dimen>
     <dimen name="main_hor_scroll_padding">8dp</dimen>
-    <dimen name="card_width">150dp</dimen>
-    <dimen name="card_height">200dp</dimen>
+    <dimen name="card_width">250dp</dimen>
+    <dimen name="card_height">80dp</dimen>
     <dimen name="comment_redius">32dp</dimen>
     <dimen name="button_redius">12dp</dimen>
     <dimen name="edt_redius">12dp</dimen>

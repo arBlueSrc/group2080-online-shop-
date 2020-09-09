@@ -31,7 +31,7 @@ class AricleAdapter extends RecyclerView.Adapter<AricleAdapter.MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_article,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_recycler_item,parent,false);
         return new MyViewHolder(view);
     }
 
