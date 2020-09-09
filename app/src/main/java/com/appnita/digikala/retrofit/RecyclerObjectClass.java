@@ -3,7 +3,7 @@ package com.appnita.digikala.retrofit;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
-public class Articles  {
+public class RecyclerObjectClass {
     private int id;
     private ImageView image;
     private String title;

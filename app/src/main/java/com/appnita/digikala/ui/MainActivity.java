@@ -13,26 +13,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.NoCopySpan;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appnita.digikala.R;
-import com.appnita.digikala.retrofit.Articles;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
-import com.appnita.digikala.retrofit.retrofit.ArticleRetrofit;
 import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
 import com.appnita.digikala.retrofit.retrofit.WooRetrofit;
 import com.google.android.material.navigation.NavigationView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;

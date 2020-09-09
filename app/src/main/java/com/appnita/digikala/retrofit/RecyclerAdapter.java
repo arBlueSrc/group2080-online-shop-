@@ -17,12 +17,12 @@ import com.appnita.digikala.R;
 
 import java.util.List;
 
-class AricleAdapter extends RecyclerView.Adapter<AricleAdapter.MyViewHolder> {
+class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
 
     Context context;
-    List<Articles> articles;
+    List<RecyclerObjectClass> articles;
 
-    public AricleAdapter(Context context, List<Articles> articles) {
+    public RecyclerAdapter(Context context, List<RecyclerObjectClass> articles) {
         this.context = context;
         this.articles = articles;
     }
@@ -37,7 +37,7 @@ class AricleAdapter extends RecyclerView.Adapter<AricleAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Articles article = articles.get(position);
+        RecyclerObjectClass article = articles.get(position);
         holder.imageview.setImageResource(R.drawable.ic_launcher_background);
         holder.title.setText(article.getTitle());
         holder.content.setText(article.getContent());
