@@ -20,11 +20,11 @@ import java.util.List;
 class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
 
     Context context;
-    List<RecyclerObjectClass> articles;
+    List<RecyclerObjectClass> list;
 
-    public RecyclerAdapter(Context context, List<RecyclerObjectClass> articles) {
+    public RecyclerAdapter(Context context, List<RecyclerObjectClass> list) {
         this.context = context;
-        this.articles = articles;
+        this.list = list;
     }
 
 
@@ -37,22 +37,23 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        RecyclerObjectClass article = articles.get(position);
+        RecyclerObjectClass recyclerObject = list.get(position);
         holder.imageview.setImageResource(R.drawable.ic_launcher_background);
-        holder.title.setText(article.getTitle());
-        holder.content.setText(article.getContent());
+        holder.title.setText(recyclerObject.getTitle());
+        holder.content.setText(recyclerObject.getContent());
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            holder.content.setText(Html.fromHtml(article.getContent(), Html.FROM_HTML_MODE_COMPACT));
+            holder.content.setText(Html.fromHtml(recyclerObject.getContent(), Html.FROM_HTML_MODE_COMPACT));
         } else {
-            holder.content.setText(Html.fromHtml(article.getContent()));
+            holder.content.setText(Html.fromHtml(recyclerObject.getContent()));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ArticlePage.class);
-                intent.putExtra("title", article.getTitle());
-                intent.putExtra("content", article.getContent());
+                intent.putExtra("title", recyclerObject.getTitle());
+                intent.putExtra("content", recyclerObject.getContent());
                 intent.putExtra("position",position);
                 context.startActivity(intent);
             }
@@ -63,7 +64,7 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
 
     @Override
     public int getItemCount() {
-        return articles.size();
+        return list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
@@ -74,9 +75,9 @@ class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageview = itemView.findViewById(R.id.article_image);
-            title = itemView.findViewById(R.id.article_txt1);
-            content = itemView.findViewById(R.id.article_txt2);
+            imageview = itemView.findViewById(R.id.rv_image);
+            title = itemView.findViewById(R.id.rv_title);
+            content = itemView.findViewById(R.id.rv_content);
         }
     }
 }
