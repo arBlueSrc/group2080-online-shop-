@@ -6,15 +6,20 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.MenuItem;
@@ -30,6 +35,7 @@ import com.appnita.digikala.retrofit.retrofit.WooRetrofit;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.nio.channels.Channel;
 import java.util.List;
 
 import retrofit2.Call;
@@ -61,8 +67,12 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbarmain);
         setSupportActionBar(toolbar);
 
-//        drawerLayout = findViewById(R.id.drawer_layout);
-//        navigationView = findViewById(R.id.navigation_view);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = new NotificationChannel("arash","arash",NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setDescription("arash khan");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
 
         //bottom navigation
         SetupBottomNavigation();
@@ -77,6 +87,27 @@ public class MainActivity extends AppCompatActivity {
         RerofitSetting();
 
 
+    }
+
+    private void addNotification() {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this,"arash")
+                        .setSmallIcon(R.drawable.ic_launcher_background) //set icon for notification
+                        .setContentTitle("Notifications Example") //set title of notification
+                        .setContentText("This is a notification message");//this is notification message
+//                        .setAutoCancel(true) // makes auto cancel of notification
+//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT); //set priority of notification
+
+
+        Intent notificationIntent = new Intent(this,MainActivity.class);
+//        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
     }
 
     private void SetupBottomNavigation() {
@@ -145,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
 //            startActivityForResult(new Intent(MainActivity.this, Login.class), 0);
 //        });
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
