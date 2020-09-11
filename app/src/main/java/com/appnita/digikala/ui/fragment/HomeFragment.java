@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -19,6 +20,8 @@ import com.appnita.digikala.retrofit.RecyclerObjectClass;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
 import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
 import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
+import com.appnita.digikala.retrofit.room.PostsDao;
+import com.appnita.digikala.retrofit.room.PostsDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,6 +57,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void RetrofitConfigurationNews() {
+        //Room
+        PostsDatabase db = Room.databaseBuilder(getContext(),
+                PostsDatabase.class, "posts_database").build();
+
+
         //server config
         RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
         ApiService apiService = retrofit.getApiService();
@@ -69,7 +77,7 @@ public class HomeFragment extends Fragment {
 
                     List<RecyclerObjectClass> rvList = new ArrayList<>();
 
-                    for (int i=0; i<list.size();i++){
+                    for (int i = list.size() - 1; i >= 0; i--) {
                         RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
                         rvOBJ.setTitle(list.get(i).getTitle());
                         rvOBJ.setContent(list.get(i).getContent());
@@ -90,6 +98,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     private void RetrofitConfigurationConsult() {
         //server config
         RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
@@ -106,7 +115,7 @@ public class HomeFragment extends Fragment {
 
                     List<RecyclerObjectClass> rvList = new ArrayList<>();
 
-                    for (int i=0; i<list.size();i++){
+                    for (int i = list.size() - 1; i >= 0; i--) {
                         RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
                         rvOBJ.setTitle(list.get(i).getTitle());
                         rvOBJ.setContent(list.get(i).getContent());
@@ -127,6 +136,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     private void RetrofitConfigurationClass() {
         //server config
         RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
@@ -143,7 +153,7 @@ public class HomeFragment extends Fragment {
 
                     List<RecyclerObjectClass> rvList = new ArrayList<>();
 
-                    for (int i=0; i<list.size();i++){
+                    for (int i = list.size() - 1; i >= 0; i--) {
                         RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
                         rvOBJ.setTitle(list.get(i).getTitle());
                         rvOBJ.setContent(list.get(i).getContent());
@@ -166,18 +176,19 @@ public class HomeFragment extends Fragment {
     }
 
     private void RecyclerViewConfiqurationNews(List<RecyclerObjectClass> list) {
-        RecyclerAdapterNews adapter = new RecyclerAdapterNews(getContext(),list);
+        RecyclerAdapterNews adapter = new RecyclerAdapterNews(getContext(), list);
         binding.rvNews.setAdapter(adapter);
     }
+
     private void RecyclerViewConfiqurationConsult(List<RecyclerObjectClass> list) {
-        RecyclerAdapterConsult adapter = new RecyclerAdapterConsult(getContext(),list);
+        RecyclerAdapterConsult adapter = new RecyclerAdapterConsult(getContext(), list);
         binding.rvConsult.setAdapter(adapter);
     }
+
     private void RecyclerViewConfiqurationClass(List<RecyclerObjectClass> list) {
-        RecyclerAdapterClass adapter = new RecyclerAdapterClass(getContext(),list);
+        RecyclerAdapterClass adapter = new RecyclerAdapterClass(getContext(), list);
         binding.rvClass.setAdapter(adapter);
     }
-
 
 
     public void countDownStart() {

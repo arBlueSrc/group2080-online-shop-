@@ -3,10 +3,24 @@ package com.appnita.digikala.retrofit;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "posts_table")
 public class RecyclerObjectClass {
+
+    @ColumnInfo(name = "post_id")
+    @PrimaryKey
     private int id;
+
+    @ColumnInfo(name = "post_image")
     private String image;
+
+    @ColumnInfo(name = "post_title")
     private String title;
+
+    @ColumnInfo(name = "post_content")
     private String content;
 
     public int getId() {

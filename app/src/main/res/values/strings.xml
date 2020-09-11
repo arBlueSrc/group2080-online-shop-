@@ -15,5 +15,9 @@
     <string name="register_button_main">ثبت نام (ظرفیت محدود)</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_menu_1">خانه</string>
+    <string name="bottom_menu_2">مشاوره</string>
+    <string name="bottom_menu_3">ویژه کنکوری ها</string>
+    <string name="bottom_menu_4">تنظیمات</string>
 
 </resources>

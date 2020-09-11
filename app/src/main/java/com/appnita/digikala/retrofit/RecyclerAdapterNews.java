@@ -28,7 +28,6 @@ public class RecyclerAdapterNews extends RecyclerView.Adapter<RecyclerAdapterNew
         this.list = list;
     }
 
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,7 +38,6 @@ public class RecyclerAdapterNews extends RecyclerView.Adapter<RecyclerAdapterNew
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         RecyclerObjectClass recyclerObject = list.get(position);
-//        holder.imageview.setImageResource(R.drawable.ic_launcher_background);
         Picasso.get()
                 .load(recyclerObject.getImage())
                 .placeholder(R.drawable.error)
@@ -64,8 +62,6 @@ public class RecyclerAdapterNews extends RecyclerView.Adapter<RecyclerAdapterNew
             }
         });
     }
-
-
 
     @Override
     public int getItemCount() {

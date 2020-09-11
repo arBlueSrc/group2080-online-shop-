@@ -3,29 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_key"
+        android:icon="@drawable/ic_home"
         android:orderInCategory="1"
         app:showAsAction="always"
-        android:title="مشاوره" />
+        android:title="@string/bottom_menu_1" />
 
     <item
         android:id="@+id/twoFragment"
-        android:icon="@drawable/ic_menu"
+        android:icon="@drawable/ic_book"
         android:orderInCategory="2"
         app:showAsAction="always"
-        android:title="ثبت نام" />
+        android:title="@string/bottom_menu_2" />
 
     <item
         android:id="@+id/threeFragment"
         android:icon="@drawable/ic_phone"
         android:orderInCategory="3"
         app:showAsAction="always"
-        android:title="ویژه کنکوری ها" />
+        android:title="@string/bottom_menu_3" />
 
     <item
         android:id="@+id/fourFragment"
         android:icon="@drawable/ic_acount"
         android:orderInCategory="4"
         app:showAsAction="always"
-        android:title="تنظیمات" />
+        android:title="@string/bottom_menu_4" />
 </menu>
