@@ -12,7 +12,7 @@ public class RecyclerObjectClass {
 
     @ColumnInfo(name = "post_id")
     @PrimaryKey
-    private int id;
+    public int id;
 
     @ColumnInfo(name = "post_image")
     private String image;
@@ -30,7 +30,6 @@ public class RecyclerObjectClass {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public String getTitle() {
         return title;

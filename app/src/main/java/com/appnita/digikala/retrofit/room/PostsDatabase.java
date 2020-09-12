@@ -19,7 +19,7 @@ public abstract class PostsDatabase extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    static PostsDatabase getDatabase (final Context context){
+    public static PostsDatabase getDatabase (final Context context){
         if(INSTANCE == null){
             synchronized (PostsDatabase.class){
                 if(INSTANCE == null){

@@ -8,15 +8,20 @@ import androidx.room.Update;
 
 import com.appnita.digikala.retrofit.RecyclerObjectClass;
 
+import java.util.List;
+
 @Dao
 public interface PostsDao {
 
     @Insert
-    void insert (RecyclerObjectClass recyclerObjectClass);
+    public void insert (RecyclerObjectClass recyclerObjectClass);
 
     @Update
     void update (RecyclerObjectClass recyclerObjectClass);
 
     @Query("Delete From posts_table")
     void deleteall();
+
+    @Query("SELECT * FROM posts_table")
+    List<RecyclerObjectClass> rvList();
 }

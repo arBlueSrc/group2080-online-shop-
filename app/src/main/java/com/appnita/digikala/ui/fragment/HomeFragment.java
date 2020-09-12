@@ -39,6 +39,8 @@ public class HomeFragment extends Fragment {
     private Handler handler;
     private Runnable runnable;
 
+    PostsDao postsDao;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,8 +49,17 @@ public class HomeFragment extends Fragment {
         //timer for event
         countDownStart();
 
+        //Room
+        postsDao = PostsDatabase.getDatabase(getContext()).postsDao();
+
+        RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+        rvOBJ.setTitle("arash");
+        rvOBJ.setContent("arash2");
+        rvOBJ.setImage("salam");
+        postsDao.insert(rvOBJ);
+
         //retrofit setting
-        RetrofitConfigurationNews();
+//        RetrofitConfigurationNews();
         RetrofitConfigurationConsult();
         RetrofitConfigurationClass();
 
@@ -57,9 +68,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void RetrofitConfigurationNews() {
-        //Room
-        PostsDatabase db = Room.databaseBuilder(getContext(),
-                PostsDatabase.class, "posts_database").build();
 
 
         //server config
@@ -82,11 +90,12 @@ public class HomeFragment extends Fragment {
                         rvOBJ.setTitle(list.get(i).getTitle());
                         rvOBJ.setContent(list.get(i).getContent());
                         rvOBJ.setImage(list.get(i).getThumbnail());
-                        rvList.add(rvOBJ);
+//                        rvList.add(rvOBJ);
+                        postsDao.insert(rvOBJ);
                     }
 
                     //recycler view
-                    RecyclerViewConfiqurationNews(rvList);
+//                    RecyclerViewConfiqurationNews(postsDao.rvList());
                 } else {
                     Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
                 }
