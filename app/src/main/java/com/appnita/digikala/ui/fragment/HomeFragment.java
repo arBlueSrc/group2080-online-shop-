@@ -56,10 +56,10 @@ public class HomeFragment extends Fragment {
         rvOBJ.setTitle("arash");
         rvOBJ.setContent("arash2");
         rvOBJ.setImage("salam");
-        postsDao.insert(rvOBJ);
+//        postsDao.insert(rvOBJ);
 
         //retrofit setting
-//        RetrofitConfigurationNews();
+        RetrofitConfigurationNews();
         RetrofitConfigurationConsult();
         RetrofitConfigurationClass();
 
@@ -90,12 +90,12 @@ public class HomeFragment extends Fragment {
                         rvOBJ.setTitle(list.get(i).getTitle());
                         rvOBJ.setContent(list.get(i).getContent());
                         rvOBJ.setImage(list.get(i).getThumbnail());
-//                        rvList.add(rvOBJ);
-                        postsDao.insert(rvOBJ);
+                        rvList.add(rvOBJ);
+//                        postsDao.insert(rvOBJ);
                     }
 
                     //recycler view
-//                    RecyclerViewConfiqurationNews(postsDao.rvList());
+                    RecyclerViewConfiqurationNews(rvList);
                 } else {
                     Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
                 }
