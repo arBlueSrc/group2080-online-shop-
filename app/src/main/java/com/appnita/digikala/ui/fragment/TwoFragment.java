@@ -33,7 +33,6 @@ public class TwoFragment extends Fragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE},0);
         }
 
-
         binding.btnCall.setOnClickListener(v -> {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(Uri.parse("tel:+989226762312"));
