@@ -1,8 +1,13 @@
 package com.appnita.digikala.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
@@ -12,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentHomeBinding;
 import com.appnita.digikala.retrofit.RecyclerAdapterClass;
 import com.appnita.digikala.retrofit.RecyclerAdapterConsult;
@@ -38,6 +44,7 @@ public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
     private Handler handler;
     private Runnable runnable;
+
 
     PostsDao postsDao;
 
@@ -184,6 +191,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
+
     private void RecyclerViewConfiqurationNews(List<RecyclerObjectClass> list) {
         RecyclerAdapterNews adapter = new RecyclerAdapterNews(getContext(), list);
         binding.rvNews.setAdapter(adapter);
@@ -198,7 +206,6 @@ public class HomeFragment extends Fragment {
         RecyclerAdapterClass adapter = new RecyclerAdapterClass(getContext(), list);
         binding.rvClass.setAdapter(adapter);
     }
-
 
     public void countDownStart() {
         handler = new Handler();

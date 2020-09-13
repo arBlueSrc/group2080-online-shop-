@@ -41,4 +41,7 @@ public interface ApiService {
     @POST("get_category_posts")
     Call<NewsRetrofit> news (@Query("id") int id);
 
+    @POST("get_category_posts")
+    Call<NewsRetrofit> notification (@Query("id") int id);
+
 }

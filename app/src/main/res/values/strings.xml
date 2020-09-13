@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Digikala</string>
+    <string name="app_name">2080</string>
 
     <!--    navigation_menu-->
     <string name="nav_site">سایت 2080</string>
@@ -63,5 +63,7 @@
 
 مشاورین گروه آموزشی ۲۰۸۰ به عنوان دوست دلسوز شما در این برهه حساس و سرنوشت ساز همراه هر روز شما خواهند بود و با ارائه خدمات مشاوره تضمینی کنکور به شما کمک خواهند کرد تا در بهترین راه قدم گذاشته و هیچ وقت حسرت گذشته را نخورید.</string>
     <string name="ad_title">مشاوره تحصیلی ۲۰۸۰</string>
+    <string name="channel_description">description for notif</string>
+    <string name="channel_name">name for notif</string>
 
 </resources>

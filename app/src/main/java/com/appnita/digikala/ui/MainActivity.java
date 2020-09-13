@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,6 +22,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +32,16 @@ import android.widget.Toast;
 
 import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.ActivityMainMajorBinding;
+import com.appnita.digikala.retrofit.RecyclerObjectClass;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
 import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
 import com.appnita.digikala.retrofit.retrofit.WooRetrofit;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.nio.channels.Channel;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -48,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     NavigationView navigationView;
+
+    private static final String CHANNEL_ID = "channel_id";
 
     SharedPreferences sharedPreferences;
 
@@ -67,12 +75,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbarmain);
         setSupportActionBar(toolbar);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel notificationChannel = new NotificationChannel("arash","arash",NotificationManager.IMPORTANCE_DEFAULT);
-            notificationChannel.setDescription("arash khan");
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
 
         //bottom navigation
         SetupBottomNavigation();
@@ -83,31 +85,10 @@ public class MainActivity extends AppCompatActivity {
         //shared preference
         SharedPreferencesSetting();
 
-        //retrofit config
-        RerofitSetting();
+        //notification
+        Notification();
 
 
-    }
-
-    private void addNotification() {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this,"arash")
-                        .setSmallIcon(R.drawable.ic_launcher_background) //set icon for notification
-                        .setContentTitle("Notifications Example") //set title of notification
-                        .setContentText("This is a notification message");//this is notification message
-//                        .setAutoCancel(true) // makes auto cancel of notification
-//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT); //set priority of notification
-
-
-        Intent notificationIntent = new Intent(this,MainActivity.class);
-//        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-        // Add as notification
-        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
     }
 
     private void SetupBottomNavigation() {
@@ -116,65 +97,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void RerofitSetting() {
-        retrofit = new RetrofitSetting("http://192.168.0.3/wordpress/wp-json/wc/v3/");
-        apiService = retrofit.getApiService();
-
-        String name = "ck_bdc9ddab522e630d2699593a7beb06e61e8b867e";
-        String pass = "cs_62933284bfe4c94468f47f2f26fa0b347088399b";
-
-        String base = name + ":" + pass;
-
-        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
-
-        Call<List<WooRetrofit>> call = apiService.getLastArticle();
-        call.enqueue(new Callback<List<WooRetrofit>>() {
-            @Override
-            public void onResponse(Call<List<WooRetrofit>> call, Response<List<WooRetrofit>> response) {
-                if (response.isSuccessful()) {
-//                ArticleRetrofit lastArticles = response.body();
-//                for (int i=0 ; i<lastArticles.getSearch().size();i++){
-//                    Articles articles1 = new Articles();
-//                    articles1.setTitle(lastArticles.getSearch().get(i).getTitle());
-//                    articles1.setContent(lastArticles.getSearch().get(i).getContent());
-//                    articles1.setId(i);
-//                    lastArticles1.add(articles1);
-//                }
-//                    RecyclerView recyclerView = findViewById(R.id.recycler1);
-//                    AricleAdapter aricleAdapter = new AricleAdapter(MainActivity.this,lastArticles1);
-//                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this,LinearLayoutManager.HORIZONTAL,false));
-//                    recyclerView.setAdapter(aricleAdapter);
-                    WooRetrofit wooRetrofit = response.body().get(0);
-                    wooRetrofit.setName(wooRetrofit.getName());
-                    Toast.makeText(MainActivity.this, "ok" + wooRetrofit.getName(), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "ok but ..." + response.body(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<WooRetrofit>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "shit" + t, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void SharedPreferencesSetting() {
         sharedPreferences = getSharedPreferences("userNameShared", Context.MODE_PRIVATE);
         Toast.makeText(this, sharedPreferences.getString("username", "nothing"), Toast.LENGTH_SHORT).show();
 
         if (sharedPreferences.getString("username", "no").equals("no")) {
-//            headerLogedIn.setVisibility(View.GONE);
-//            headerLogin.setVisibility(View.VISIBLE);
+
         } else {
-//            headerLogedIn.setText("0" + sharedPreferences.getString("username", "noname"));
-//            headerLogedIn.setVisibility(View.VISIBLE);
-//            headerLogin.setVisibility(View.GONE);
+
         }
 
-//        headerLogin.setOnClickListener(v -> {
-//            startActivityForResult(new Intent(MainActivity.this, Login.class), 0);
-//        });
     }
 
     @Override
@@ -182,13 +114,75 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (sharedPreferences.getString("username", "no").equals("no")) {
-            headerLogedIn.setVisibility(View.GONE);
-            headerLogin.setVisibility(View.VISIBLE);
+
         } else {
-            headerLogin.setText(sharedPreferences.getString("username", "noname"));
-            headerLogedIn.setVisibility(View.VISIBLE);
-            headerLogin.setVisibility(View.GONE);
+
         }
     }
 
+    private void Notification() {
+        //server config
+        RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
+        ApiService apiService = retrofit.getApiService();
+
+
+        Call<NewsRetrofit> call = apiService.notification(396);
+        call.enqueue(new Callback<NewsRetrofit>() {
+            @Override
+            public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
+                if (response.isSuccessful()) {
+                    List<NewsRetrofit.posts> list = new ArrayList<>();
+                    list = response.body().getNews();
+
+                    String sourceContent = list.get(0).getContent();
+                    Spanned finalContent;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        finalContent = Html.fromHtml(sourceContent, Html.FROM_HTML_MODE_COMPACT);
+                    } else {
+                        finalContent = Html.fromHtml(sourceContent);
+                    }
+
+                    //region notification
+                    createNotificationChannel();
+
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, CHANNEL_ID)
+                            .setSmallIcon(R.drawable.ic_notification)
+                            .setContentTitle(list.get(0).getTitle())
+                            .setContentText(finalContent)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                    //show the notification
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity.this);
+
+                    // notificationId is a unique int for each notification that you must define
+                    notificationManager.notify(0, builder.build());
+
+                } else {
+                    Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewsRetrofit> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 }
