@@ -23,6 +23,17 @@ public class RecyclerObjectClass {
     @ColumnInfo(name = "post_content")
     private String content;
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @ColumnInfo(name = "post_url")
+    private String url;
+
     public int getId() {
         return id;
     }

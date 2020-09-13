@@ -22,6 +22,18 @@ public class NewsRetrofit {
         @Expose
         private String content;
 
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        @SerializedName("url")
+        @Expose
+        private String url;
+
         @SerializedName("comments")
         @Expose
         private List<Comments> comments = null;

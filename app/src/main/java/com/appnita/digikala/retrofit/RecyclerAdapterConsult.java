@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.R;
+import com.appnita.digikala.WebPage;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -56,10 +57,8 @@ public class RecyclerAdapterConsult extends RecyclerView.Adapter<RecyclerAdapter
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ArticlePage.class);
-                intent.putExtra("title", recyclerObject.getTitle());
-                intent.putExtra("content", recyclerObject.getContent());
-                intent.putExtra("position",position);
+                Intent intent = new Intent(context, WebPage.class);
+                intent.putExtra("url",recyclerObject.getUrl());
                 context.startActivity(intent);
             }
         });

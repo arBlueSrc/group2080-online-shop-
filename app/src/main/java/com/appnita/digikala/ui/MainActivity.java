@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void Notification() {
+    public void Notification() {
         //server config
         RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
         ApiService apiService = retrofit.getApiService();
@@ -185,4 +185,6 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
+
 }

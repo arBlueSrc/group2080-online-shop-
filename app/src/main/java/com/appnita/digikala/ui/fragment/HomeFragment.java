@@ -97,6 +97,7 @@ public class HomeFragment extends Fragment {
                         rvOBJ.setTitle(list.get(i).getTitle());
                         rvOBJ.setContent(list.get(i).getContent());
                         rvOBJ.setImage(list.get(i).getThumbnail());
+                        rvOBJ.setUrl(list.get(i).getUrl());
                         rvList.add(rvOBJ);
 //                        postsDao.insert(rvOBJ);
                     }
@@ -136,6 +137,7 @@ public class HomeFragment extends Fragment {
                         rvOBJ.setTitle(list.get(i).getTitle());
                         rvOBJ.setContent(list.get(i).getContent());
                         rvOBJ.setImage(list.get(i).getThumbnail());
+                        rvOBJ.setUrl(list.get(i).getUrl());
                         rvList.add(rvOBJ);
                     }
 
@@ -174,6 +176,7 @@ public class HomeFragment extends Fragment {
                         rvOBJ.setTitle(list.get(i).getTitle());
                         rvOBJ.setContent(list.get(i).getContent());
                         rvOBJ.setImage(list.get(i).getThumbnail());
+                        rvOBJ.setUrl(list.get(i).getUrl());
                         rvList.add(rvOBJ);
                     }
 
@@ -244,5 +247,7 @@ public class HomeFragment extends Fragment {
         };
         handler.postDelayed(runnable, 1000);
     }
+
+
 
 }

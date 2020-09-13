@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
     <application
         android:fullBackupContent="@xml/backup_descriptor"
@@ -17,11 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="m">
+        tools:targetApi="n">
+
         <activity android:name=".extraApp.Darsad">
 
         </activity>
-        <activity android:name=".WebView" />
+        <activity android:name=".WebPage" />
         <activity android:name=".ui.Register2" />
         <activity android:name=".ui.Register" />
         <activity android:name=".ui.LoginActivity" />
@@ -33,6 +36,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".ConnectivityDetection">
+            <intent-filter>
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+            </intent-filter>
+        </receiver>
     </application>
+
 
 </manifest>
