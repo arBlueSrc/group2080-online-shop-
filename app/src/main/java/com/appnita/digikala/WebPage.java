@@ -5,13 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.webkit.ClientCertRequest;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -24,6 +30,9 @@ import com.appnita.digikala.databinding.ActivityWebViewBinding;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.webkit.WebView.RENDERER_PRIORITY_BOUND;
 
@@ -43,6 +52,7 @@ public class WebPage extends AppCompatActivity {
 
         WebSettings webSettings = binding.webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setAllowFileAccess(true);
 //
 //        if (18 < Build.VERSION.SDK_INT ){
 //            //18 = JellyBean MR2, KITKAT=19
@@ -54,22 +64,51 @@ public class WebPage extends AppCompatActivity {
 
 
 
-
-//        binding.webView.loadUrl(intent.getStringExtra("url"));
         binding.webView.setWebViewClient(new mWebViewClient());
-        binding.webView.loadUrl("Https://www.group2080.ir");
+
+        binding.webView.loadUrl(intent.getStringExtra("url"));
+
+//        binding.webView.loadUrl("Https://www.google.com");
 //        Log.i("url is :", intent.getStringExtra("url"));
 
     }
 
     private class mWebViewClient extends WebViewClient {
+
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);
             return true;
         }
 
-//        @Override
+        boolean timeout;
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    timeout = true;
+
+                    try {
+                        Thread.sleep(15000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if(timeout) {
+                        // do what you want
+                    }
+                }فاقثث
+            }).start();
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            timeout = false;
+        }
+
+        //        @Override
 //        public void onReceivedSslError(android.webkit.WebView view, SslErrorHandler handler, SslError error) {
 //            handler.proceed(); // Ignore SSL certificate errors
 //        }
