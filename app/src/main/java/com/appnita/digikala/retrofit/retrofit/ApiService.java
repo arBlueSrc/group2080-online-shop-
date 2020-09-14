@@ -1,5 +1,7 @@
 package com.appnita.digikala.retrofit.retrofit;
 
+import com.appnita.digikala.retrofit.basket.Products;
+
 import java.util.List;
 
 import okhttp3.RequestBody;
@@ -44,4 +46,6 @@ public interface ApiService {
     @POST("get_category_posts")
     Call<NewsRetrofit> notification (@Query("id") int id);
 
+    @GET("products")
+    Call<List<Products>> getProducts();
 }
