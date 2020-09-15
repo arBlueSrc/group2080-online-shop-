@@ -29,13 +29,13 @@ public interface ApiService {
     Call<LoginRetrofit> login (@Body RequestBody body);
 
     @POST("send_otp")
-    public Call<Verifycode> sendOtp (@Query("countrycode") String countryCode,
+    Call<Verifycode> sendOtp (@Query("countrycode") String countryCode,
                               @Query("mobileNo") String mobileNo,
                               @Query("type") String type,
                               @Query("username") String username);
 
     @POST("verify_otp")
-    public Call<Verifycode> verifyOtp (@Query("countrycode") String countryCode,
+    Call<Verifycode> verifyOtp (@Query("countrycode") String countryCode,
                                      @Query("mobileNo") String mobileNo,
                                      @Query("type") String type,
                                      @Query("otp") String username);

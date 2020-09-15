@@ -58,7 +58,6 @@ public class Products {
         private String src;
     }
 
-
     public List<Category> getCategories() {
         return categories;
     }

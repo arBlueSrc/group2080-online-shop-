@@ -99,7 +99,7 @@ public class WebPage extends AppCompatActivity {
                     if(timeout) {
                         // do what you want
                     }
-                }فاقثث
+                }
             }).start();
         }
 

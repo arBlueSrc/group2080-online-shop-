@@ -31,16 +31,25 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_recycler_item,parent);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_recycler_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Products products = list.get(position);
+
+        String imageUrl = products.getImages().get(0).getSrc();
+        Picasso.get()
+                .load(imageUrl)
+                .placeholder(R.drawable.error)
+                .resize(1000, 1000)
+                .onlyScaleDown()
+                .into(holder.image);
         holder.name.setText(products.getName());
         holder.price.setText(products.getPrice());
-        Picasso.get().load(products.getImages().get(0).getSrc()).into(holder.image);
+
+
     }
 
     @Override
@@ -51,6 +60,7 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name, price;
         ImageView image;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.rv_title);
