@@ -1,6 +1,7 @@
 package com.appnita.digikala.retrofit.basket;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,9 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
         holder.name.setText(products.getName());
         holder.price.setText(products.getPrice());
 
-
+        holder.itemView.setOnClickListener(v -> {
+//            Intent intent = new Intent(context,)
+        });
     }
 
     @Override
