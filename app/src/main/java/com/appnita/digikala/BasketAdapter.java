@@ -39,6 +39,18 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         Products recyclerClass = list.get(position);
         holder.title.setText(recyclerClass.getName());
         holder.price.setText(recyclerClass.getPrice());
+
+        holder.delete.setOnLongClickListener(v -> {
+            Products recyclerClass2 = list.get(position);
+            list.remove(recyclerClass2);
+            Lists.basketClass.remove(recyclerClass2);
+            notifyDataSetChanged();
+            return true;
+        });
+
+        holder.delete.setOnClickListener(v -> {
+            Toast.makeText(context, "برای حذف، دکمه را نگه دارید", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override
@@ -56,16 +68,7 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
             delete = itemView.findViewById(R.id.btn_delete);
             price = itemView.findViewById(R.id.rv_price);
 
-            delete.setOnLongClickListener(v -> {
-                Products recyclerClass = list.get(getAdapterPosition());
-                list.remove(recyclerClass);
-                notifyDataSetChanged();
-                return true;
-            });
 
-            delete.setOnClickListener(v -> {
-                Toast.makeText(context, "برای حذف، دکمه را نگه دارید", Toast.LENGTH_SHORT).show();
-            });
 
         }
     }

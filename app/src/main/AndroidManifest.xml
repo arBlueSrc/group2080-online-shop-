@@ -18,7 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.Basket"></activity>
+        <activity android:name=".ui.Basket">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="return"
+                      android:host="app"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.ProductDetail" />
         <activity android:name=".extraApp.Darsad" />
         <activity android:name=".WebPage" />
@@ -29,7 +37,6 @@
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -41,6 +48,7 @@
                     tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

@@ -3,6 +3,8 @@ package com.appnita.digikala.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,6 +18,10 @@ import com.appnita.digikala.retrofit.basket.AdapterProducts;
 import com.appnita.digikala.retrofit.basket.Products;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.zarinpal.ewallets.purchase.OnCallbackRequestPaymentListener;
+import com.zarinpal.ewallets.purchase.OnCallbackVerificationPaymentListener;
+import com.zarinpal.ewallets.purchase.PaymentRequest;
+import com.zarinpal.ewallets.purchase.ZarinPal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +45,22 @@ public class Basket extends AppCompatActivity {
         totalPrice = 0;
         RetrofitConfig();
 
+        //zarinpal payment
+        Uri data = getIntent().getData();
+        ZarinPal.getPurchase(this).verificationPayment(data, new OnCallbackVerificationPaymentListener() {
+            @Override
+            public void onCallbackResultVerificationPayment(boolean isPaymentSuccess, String refID, PaymentRequest paymentRequest) {
+                if(isPaymentSuccess){
+                    Toast.makeText(Basket.this, "پرداخت موفقیت آمیز بود." + refID, Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(Basket.this, "پرداخت با خطا مواجه شد!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
+        binding.goToPay.setOnClickListener(v -> {
+            myPayment( 500L);
+        });
     }
 
     private void RetrofitConfig() {
@@ -70,7 +91,6 @@ public class Basket extends AppCompatActivity {
                     binding.rvBasket.setAdapter(adapter);
 
 
-
                     for (int i = 0; i < products.size(); i++) {
                         totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
                     }
@@ -94,5 +114,26 @@ public class Basket extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    private void myPayment(Long amount) {
+        ZarinPal purchase = ZarinPal.getPurchase(this);
+        PaymentRequest payment = ZarinPal.getPaymentRequest();
+
+        payment.setMerchantID("ea80cb7e-a4c4-11e9-97b4-000c29344814");
+        payment.setAmount(amount);
+        payment.setDescription("خرید توسط اپلیکیشن ۲۰۸۰");
+
+        payment.setCallbackURL("return://app");
+        purchase.startPayment(payment, new OnCallbackRequestPaymentListener() {
+            @Override
+            public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
+                if (status == 100){
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(Basket.this, "خطا در پرداخت", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
