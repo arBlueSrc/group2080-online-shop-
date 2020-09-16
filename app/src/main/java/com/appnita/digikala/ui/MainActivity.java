@@ -88,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
         //notification
         Notification();
 
+        //float action button
+        binding.floatingActionButton.setOnClickListener(v -> {
+            startActivity(new Intent(this,Basket.class));
+        });
+
 
     }
 

@@ -18,8 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ProductDetail"></activity>
-        <activity android:name=".extraApp.Darsad"></activity>
+        <activity android:name=".ui.Basket"></activity>
+        <activity android:name=".ui.ProductDetail" />
+        <activity android:name=".extraApp.Darsad" />
         <activity android:name=".WebPage" />
         <activity android:name=".ui.Register2" />
         <activity android:name=".ui.Register" />
