@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.appnita.digikala.R;
 import com.appnita.digikala.retrofit.RecyclerAdapterClass;
 import com.appnita.digikala.retrofit.RecyclerObjectClass;
+import com.appnita.digikala.ui.ProductDetail;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -51,7 +52,12 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
         holder.price.setText(products.getPrice());
 
         holder.itemView.setOnClickListener(v -> {
-//            Intent intent = new Intent(context,)
+            Intent intent = new Intent(context, ProductDetail.class);
+            intent.putExtra("title",products.getName());
+            intent.putExtra("content",products.getDescription());
+            intent.putExtra("price",products.getPrice());
+            intent.putExtra("image",products.getImages().get(0).getSrc());
+            context.startActivity(intent);
         });
     }
 
@@ -71,5 +77,6 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
             image = itemView.findViewById(R.id.rv_image);
         }
     }
+
 
 }
