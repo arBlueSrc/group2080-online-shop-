@@ -69,11 +69,15 @@ public class Basket extends AppCompatActivity {
                     BasketAdapter adapter = new BasketAdapter(Basket.this, products);
                     binding.rvBasket.setAdapter(adapter);
 
+
+
                     for (int i = 0; i < products.size(); i++) {
                         totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
                     }
 
-                    binding.totalPrice.setText(String.valueOf(totalPrice)+" تومان");
+                    String tPrice = String.valueOf(totalPrice);
+
+                    binding.totalPrice.setText(tPrice + "تومان");
 
                 } else {
                     Toast.makeText(Basket.this, "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
