@@ -21,7 +21,6 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
     Context context;
     List<Products> list;
 
-
     public BasketAdapter (Context context, List<Products> list) {
         this.context = context;
         this.list = list;
@@ -70,5 +69,4 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
         }
     }
-
 }

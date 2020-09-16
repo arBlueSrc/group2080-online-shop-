@@ -2,6 +2,7 @@ package com.appnita.digikala.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ public class ProductDetail extends AppCompatActivity {
 
     LayoutProductDetailsBinding binding;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +34,7 @@ public class ProductDetail extends AppCompatActivity {
                 .resize(1000, 1000)
                 .onlyScaleDown()
                 .into(binding.image);
-        binding.detailPrice.setText(intent.getStringExtra("price"+" تومان"));
+        binding.detailPrice.setText(intent.getStringExtra("price")+" تومان");
 
         int id = intent.getIntExtra("id",0);
 

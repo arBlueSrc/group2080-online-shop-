@@ -2,6 +2,7 @@ package com.appnita.digikala.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,12 +28,15 @@ public class Basket extends AppCompatActivity {
 
     ActivityBasketBinding binding;
 
+    int totalPrice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityBasketBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        totalPrice = 0;
         RetrofitConfig();
 
 
@@ -56,6 +60,7 @@ public class Basket extends AppCompatActivity {
 
         Call<List<Products>> call = apiService.getProductsBasket(a);
         call.enqueue(new Callback<List<Products>>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
                 if (response.isSuccessful()) {
@@ -63,6 +68,12 @@ public class Basket extends AppCompatActivity {
 
                     BasketAdapter adapter = new BasketAdapter(Basket.this, products);
                     binding.rvBasket.setAdapter(adapter);
+
+                    for (int i = 0; i < products.size(); i++) {
+                        totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
+                    }
+
+                    binding.totalPrice.setText(String.valueOf(totalPrice)+" تومان");
 
                 } else {
                     Toast.makeText(Basket.this, "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
