@@ -22,6 +22,17 @@ public class Products {
         this.price = price;
     }
 
+    @SerializedName("id")
+    @Expose
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @SerializedName("name")
     @Expose
@@ -44,7 +55,7 @@ public class Products {
     @Expose
     private List<Image> images = null;
 
-    public class Image{
+    public class Image {
         public String getSrc() {
             return src;
         }
@@ -70,7 +81,7 @@ public class Products {
     @Expose
     private List<Category> categories = null;
 
-    public class Category{
+    public class Category {
         @SerializedName("name")
         @Expose
         private String name;

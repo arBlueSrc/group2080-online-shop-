@@ -89,7 +89,7 @@
             android:text="۲۰۰۰۰ تومان" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_add_basket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

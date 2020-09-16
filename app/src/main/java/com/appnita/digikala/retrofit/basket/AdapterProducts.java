@@ -57,6 +57,7 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
             intent.putExtra("content",products.getDescription());
             intent.putExtra("price",products.getPrice());
             intent.putExtra("image",products.getImages().get(0).getSrc());
+            intent.putExtra("id",products.getId());
             context.startActivity(intent);
         });
     }
