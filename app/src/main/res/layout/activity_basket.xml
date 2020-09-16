@@ -34,6 +34,8 @@
         android:id="@+id/rv_basket"
         android:layout_width="409dp"
         android:layout_height="552dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/go_to_pay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

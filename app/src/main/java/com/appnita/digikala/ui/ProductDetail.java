@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.appnita.digikala.BasketClass;
 import com.appnita.digikala.Lists;
@@ -31,11 +32,13 @@ public class ProductDetail extends AppCompatActivity {
                 .resize(1000, 1000)
                 .onlyScaleDown()
                 .into(binding.image);
+        binding.detailPrice.setText(intent.getStringExtra("price"+" تومان"));
 
-        String id = intent.getStringExtra("id");
+        int id = intent.getIntExtra("id",0);
 
         binding.btnAddBasket.setOnClickListener(v -> {
             Lists.basketClass.add(new BasketClass(id));
+            Toast.makeText(this, "به سبد شما افزوده شد", Toast.LENGTH_SHORT).show();
         });
     }
 }

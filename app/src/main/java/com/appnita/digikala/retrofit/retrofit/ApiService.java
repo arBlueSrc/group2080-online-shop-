@@ -48,4 +48,7 @@ public interface ApiService {
 
     @GET("products")
     Call<List<Products>> getProducts();
+
+    @GET("products")
+    Call<List<Products>> getProductsBasket(@Query("include[]") List<Integer> id);
 }
