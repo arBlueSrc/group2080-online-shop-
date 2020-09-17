@@ -36,5 +36,14 @@
         android:id="@+id/fourFragment"
         android:name="com.appnita.digikala.ui.fragment.FourFragment"
         android:label="fragment_four"
-        tools:layout="@layout/fragment_four" />
+        tools:layout="@layout/fragment_four" >
+        <action
+            android:id="@+id/action_fourFragment_to_fiveFragment2"
+            app:destination="@id/fiveFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fiveFragment"
+        android:name="com.appnita.digikala.ui.fragment.FiveFragment"
+        android:label="fragment_five"
+        tools:layout="@layout/fragment_five" />
 </navigation>

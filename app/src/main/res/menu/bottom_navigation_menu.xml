@@ -24,8 +24,15 @@
 
     <item
         android:id="@+id/fourFragment"
-        android:icon="@drawable/ic_acount"
+        android:icon="@drawable/ic_setting"
         android:orderInCategory="4"
         app:showAsAction="always"
         android:title="@string/bottom_menu_4" />
+
+    <item
+        android:id="@+id/fiveFragment"
+        android:icon="@drawable/ic_acount"
+        android:orderInCategory="4"
+        app:showAsAction="always"
+        android:title="@string/bottom_menu_5" />
 </menu>
