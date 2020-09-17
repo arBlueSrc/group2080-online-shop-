@@ -1,5 +1,7 @@
 package com.appnita.digikala.retrofit.basket;
 
+import androidx.room.Entity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

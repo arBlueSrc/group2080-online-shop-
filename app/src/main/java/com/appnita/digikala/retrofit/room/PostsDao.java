@@ -23,5 +23,5 @@ public interface PostsDao {
     void deleteall();
 
     @Query("SELECT * FROM posts_table")
-    List<RecyclerObjectClass> rvList();
+    List<RecyclerObjectClass> getAllPosts();
 }

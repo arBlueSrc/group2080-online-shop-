@@ -92,26 +92,42 @@ public class HomeFragment extends Fragment {
 
                     List<RecyclerObjectClass> rvList = new ArrayList<>();
 
-                    for (int i = list.size() - 1; i >= 0; i--) {
-                        RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                        rvOBJ.setTitle(list.get(i).getTitle());
-                        rvOBJ.setContent(list.get(i).getContent());
-                        rvOBJ.setImage(list.get(i).getThumbnail());
-                        rvOBJ.setUrl(list.get(i).getUrl());
-                        rvList.add(rvOBJ);
-//                        postsDao.insert(rvOBJ);
+                    if(postsDao.getAllPosts().size()==0){
+                        for (int i = list.size() - 1; i >= 0; i--) {
+                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                            rvOBJ.setTitle(list.get(i).getTitle());
+                            rvOBJ.setContent(list.get(i).getContent());
+                            rvOBJ.setImage(list.get(i).getThumbnail());
+                            rvOBJ.setUrl(list.get(i).getUrl());
+                            postsDao.insert(rvOBJ);
+                        }
+                    }
+
+                    if (list.get(list.size() - 1).getTitle().equals
+                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
+
+                        for (int i = list.size() - 1; i >= 0; i--) {
+                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                            rvOBJ.setTitle(list.get(i).getTitle());
+                            rvOBJ.setContent(list.get(i).getContent());
+                            rvOBJ.setImage(list.get(i).getThumbnail());
+                            rvOBJ.setUrl(list.get(i).getUrl());
+                            postsDao.insert(rvOBJ);
+                        }
                     }
 
                     //recycler view
-                    RecyclerViewConfiqurationNews(rvList);
+                    RecyclerViewConfiqurationNews(postsDao.getAllPosts());
                 } else {
                     Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                    RecyclerViewConfiqurationNews(postsDao.getAllPosts());
                 }
             }
 
             @Override
             public void onFailure(Call<NewsRetrofit> call, Throwable t) {
-                Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "خظا در برقراری ارتباط", Toast.LENGTH_SHORT).show();
+                RecyclerViewConfiqurationNews(postsDao.getAllPosts());
             }
         });
     }
@@ -132,25 +148,40 @@ public class HomeFragment extends Fragment {
 
                     List<RecyclerObjectClass> rvList = new ArrayList<>();
 
-                    for (int i = list.size() - 1; i >= 0; i--) {
-                        RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                        rvOBJ.setTitle(list.get(i).getTitle());
-                        rvOBJ.setContent(list.get(i).getContent());
-                        rvOBJ.setImage(list.get(i).getThumbnail());
-                        rvOBJ.setUrl(list.get(i).getUrl());
-                        rvList.add(rvOBJ);
+                    if(postsDao.getAllPosts().size()==0){
+                        for (int i = list.size() - 1; i >= 0; i--) {
+                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                            rvOBJ.setTitle(list.get(i).getTitle());
+                            rvOBJ.setContent(list.get(i).getContent());
+                            rvOBJ.setImage(list.get(i).getThumbnail());
+                            rvOBJ.setUrl(list.get(i).getUrl());
+                            postsDao.insert(rvOBJ);
+                        }
+                    }
+
+                    if (list.get(list.size() - 1).getTitle().equals
+                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
+
+                        for (int i = list.size() - 1; i >= 0; i--) {
+                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                            rvOBJ.setTitle(list.get(i).getTitle());
+                            rvOBJ.setContent(list.get(i).getContent());
+                            rvOBJ.setImage(list.get(i).getThumbnail());
+                            rvOBJ.setUrl(list.get(i).getUrl());
+                            postsDao.insert(rvOBJ);
+                        }
                     }
 
                     //recycler view
-                    RecyclerViewConfiqurationConsult(rvList);
+                    RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
                 } else {
-                    Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                    RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
                 }
             }
 
             @Override
             public void onFailure(Call<NewsRetrofit> call, Throwable t) {
-                Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
             }
         });
     }
@@ -171,25 +202,40 @@ public class HomeFragment extends Fragment {
 
                     List<RecyclerObjectClass> rvList = new ArrayList<>();
 
-                    for (int i = list.size() - 1; i >= 0; i--) {
-                        RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                        rvOBJ.setTitle(list.get(i).getTitle());
-                        rvOBJ.setContent(list.get(i).getContent());
-                        rvOBJ.setImage(list.get(i).getThumbnail());
-                        rvOBJ.setUrl(list.get(i).getUrl());
-                        rvList.add(rvOBJ);
+                    if(postsDao.getAllPosts().size()==0){
+                        for (int i = list.size() - 1; i >= 0; i--) {
+                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                            rvOBJ.setTitle(list.get(i).getTitle());
+                            rvOBJ.setContent(list.get(i).getContent());
+                            rvOBJ.setImage(list.get(i).getThumbnail());
+                            rvOBJ.setUrl(list.get(i).getUrl());
+                            postsDao.insert(rvOBJ);
+                        }
+                    }
+
+                    if (list.get(list.size() - 1).getTitle().equals
+                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
+
+                        for (int i = list.size() - 1; i >= 0; i--) {
+                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                            rvOBJ.setTitle(list.get(i).getTitle());
+                            rvOBJ.setContent(list.get(i).getContent());
+                            rvOBJ.setImage(list.get(i).getThumbnail());
+                            rvOBJ.setUrl(list.get(i).getUrl());
+                            postsDao.insert(rvOBJ);
+                        }
                     }
 
                     //recycler view
-                    RecyclerViewConfiqurationClass(rvList);
+                    RecyclerViewConfiqurationClass(postsDao.getAllPosts());
                 } else {
-                    Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                    RecyclerViewConfiqurationClass(postsDao.getAllPosts());
                 }
             }
 
             @Override
             public void onFailure(Call<NewsRetrofit> call, Throwable t) {
-                Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                RecyclerViewConfiqurationClass(postsDao.getAllPosts());
             }
         });
     }
@@ -247,7 +293,6 @@ public class HomeFragment extends Fragment {
         };
         handler.postDelayed(runnable, 1000);
     }
-
 
 
 }

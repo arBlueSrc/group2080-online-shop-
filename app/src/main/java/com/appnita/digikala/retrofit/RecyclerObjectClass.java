@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 public class RecyclerObjectClass {
 
     @ColumnInfo(name = "post_id")
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
 
     @ColumnInfo(name = "post_image")
