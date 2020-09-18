@@ -17,6 +17,9 @@ import com.appnita.digikala.retrofit.basket.AdapterProducts;
 import com.appnita.digikala.retrofit.basket.Products;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,7 @@ import retrofit2.Response;
 public class ThreeFragment extends Fragment {
 
     FragmentThreeBinding binding;
+    RecyclerViewSkeletonScreen skeletonScreen;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +41,12 @@ public class ThreeFragment extends Fragment {
         binding.btnDarsad.setOnClickListener(v -> {
             startActivity(new Intent(getContext(), Darsad.class));
         });
+
+        AdapterProducts adapter = new AdapterProducts();
+        skeletonScreen = Skeleton.bind(binding.rvProducts)
+                .adapter(adapter)
+                .load(R.layout.item_skeleton)
+                .show();
 
         RetrofitConfig();
 
@@ -58,7 +68,7 @@ public class ThreeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<Products> products = response.body();
 
-
+                    skeletonScreen.hide();
                     AdapterProducts productAdapter = new AdapterProducts(getContext(), products);
                     binding.rvProducts.setAdapter(productAdapter);
 

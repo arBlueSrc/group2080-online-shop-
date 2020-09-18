@@ -23,11 +23,14 @@ import com.appnita.digikala.retrofit.RecyclerAdapterClass;
 import com.appnita.digikala.retrofit.RecyclerAdapterConsult;
 import com.appnita.digikala.retrofit.RecyclerAdapterNews;
 import com.appnita.digikala.retrofit.RecyclerObjectClass;
+import com.appnita.digikala.retrofit.basket.AdapterProducts;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
 import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
 import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
 import com.appnita.digikala.retrofit.room.PostsDao;
 import com.appnita.digikala.retrofit.room.PostsDatabase;
+import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
+import com.ethanhua.skeleton.Skeleton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
     private Handler handler;
     private Runnable runnable;
+    RecyclerViewSkeletonScreen skeletonScreen1,skeletonScreen2,skeletonScreen3;
 
 
     PostsDao postsDao;
@@ -55,6 +59,28 @@ public class HomeFragment extends Fragment {
 
         //timer for event
         countDownStart();
+
+        //skeleton
+        RecyclerAdapterNews adapter = new RecyclerAdapterNews();
+        skeletonScreen1 = Skeleton.bind(binding.rvNews)
+                .adapter(adapter)
+                .duration(2000)
+                .load(R.layout.item_skeleton)
+                .show();
+
+        RecyclerAdapterConsult adapter2 = new RecyclerAdapterConsult();
+        skeletonScreen2 = Skeleton.bind(binding.rvConsult)
+                .adapter(adapter2)
+                .duration(2000)
+                .load(R.layout.item_skeleton)
+                .show();
+
+        RecyclerAdapterClass adapter3 = new RecyclerAdapterClass();
+        skeletonScreen3 = Skeleton.bind(binding.rvClass)
+                .adapter(adapter3)
+                .duration(2000)
+                .load(R.layout.item_skeleton)
+                .show();
 
         //Room
         postsDao = PostsDatabase.getDatabase(getContext()).postsDao();
@@ -116,16 +142,18 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
+                    skeletonScreen1.hide();
                     //recycler view
                     RecyclerViewConfiqurationNews(postsDao.getAllPosts());
                 } else {
-                    Toast.makeText(getContext(), "failure", Toast.LENGTH_SHORT).show();
+                    skeletonScreen1.hide();
                     RecyclerViewConfiqurationNews(postsDao.getAllPosts());
                 }
             }
 
             @Override
             public void onFailure(Call<NewsRetrofit> call, Throwable t) {
+                skeletonScreen1.hide();
                 Toast.makeText(getContext(), "خظا در برقراری ارتباط", Toast.LENGTH_SHORT).show();
                 RecyclerViewConfiqurationNews(postsDao.getAllPosts());
             }
@@ -172,15 +200,18 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
+                    skeletonScreen2.hide();
                     //recycler view
                     RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
                 } else {
+                    skeletonScreen2.hide();
                     RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
                 }
             }
 
             @Override
             public void onFailure(Call<NewsRetrofit> call, Throwable t) {
+                skeletonScreen2.hide();
                 RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
             }
         });
@@ -226,15 +257,18 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
+                    skeletonScreen3.hide();
                     //recycler view
                     RecyclerViewConfiqurationClass(postsDao.getAllPosts());
                 } else {
+                    skeletonScreen3.hide();
                     RecyclerViewConfiqurationClass(postsDao.getAllPosts());
                 }
             }
 
             @Override
             public void onFailure(Call<NewsRetrofit> call, Throwable t) {
+                skeletonScreen3.hide();
                 RecyclerViewConfiqurationClass(postsDao.getAllPosts());
             }
         });

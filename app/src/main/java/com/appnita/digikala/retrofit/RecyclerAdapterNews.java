@@ -24,6 +24,9 @@ public class RecyclerAdapterNews extends RecyclerView.Adapter<RecyclerAdapterNew
     Context context;
     List<RecyclerObjectClass> list;
 
+    public RecyclerAdapterNews() {
+    }
+
     public RecyclerAdapterNews(Context context, List<RecyclerObjectClass> list) {
         this.context = context;
         this.list = list;

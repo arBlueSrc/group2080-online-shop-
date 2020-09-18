@@ -24,6 +24,9 @@ public class RecyclerAdapterClass extends RecyclerView.Adapter<RecyclerAdapterCl
     Context context;
     List<RecyclerObjectClass> list;
 
+    public RecyclerAdapterClass() {
+    }
+
     public RecyclerAdapterClass(Context context, List<RecyclerObjectClass> list) {
         this.context = context;
         this.list = list;
