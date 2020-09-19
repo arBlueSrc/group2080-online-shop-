@@ -1,15 +1,9 @@
 package com.appnita.digikala.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
-import androidx.room.Room;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -23,7 +17,6 @@ import com.appnita.digikala.retrofit.RecyclerAdapterClass;
 import com.appnita.digikala.retrofit.RecyclerAdapterConsult;
 import com.appnita.digikala.retrofit.RecyclerAdapterNews;
 import com.appnita.digikala.retrofit.RecyclerObjectClass;
-import com.appnita.digikala.retrofit.basket.AdapterProducts;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
 import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
 import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
@@ -33,7 +26,6 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +38,6 @@ public class HomeFragment extends Fragment {
 
     FragmentHomeBinding binding;
     private Handler handler;
-    private Runnable runnable;
     RecyclerViewSkeletonScreen skeletonScreen1, skeletonScreen2, skeletonScreen3;
 
 
@@ -85,16 +76,6 @@ public class HomeFragment extends Fragment {
         //Room
         postsDao = PostsDatabase.getDatabase(getContext()).postsDao();
 
-        RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-        rvOBJ.setTitle("arash");
-        rvOBJ.setContent("arash2");
-        rvOBJ.setImage("salam");
-//        postsDao.insert(rvOBJ);
-
-        //retrofit setting
-//        RetrofitConfigurationNews();
-//        RetrofitConfigurationConsult();
-//        RetrofitConfigurationClass();
 
         RetrofitConfiguration();
         return binding.getRoot();
@@ -111,8 +92,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
                 if (response.isSuccessful()) {
-                    List<NewsRetrofit.posts> list;
-                    list = response.body().getNews();
+                    assert response.body() != null;
+                    List<NewsRetrofit.posts> list = response.body().getNews();
 
 
                     if (postsDao.getAllPosts().size() == 0) {
@@ -140,17 +121,12 @@ public class HomeFragment extends Fragment {
                             }
                         }
 
-                        skeletonScreen3.hide();
                         //recycler view
-                        RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
-                        RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
-                        RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
-                    } else {
-                        skeletonScreen3.hide();
-                        RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
-                        RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
-                        RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
                     }
+                    skeletonScreen3.hide();
+                    RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
+                    RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
+                    RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
                 }
             }
 
@@ -182,7 +158,8 @@ public class HomeFragment extends Fragment {
 
     public void countDownStart() {
         handler = new Handler();
-        runnable = new Runnable() {
+        // Please here set your event date//YYYY-MM-DD
+        Runnable runnable = new Runnable() {
             @SuppressLint({"DefaultLocale", "SetTextI18n"})
             @Override
             public void run() {
@@ -191,10 +168,12 @@ public class HomeFragment extends Fragment {
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(
                             "yyyy-MM-dd");
                     // Please here set your event date//YYYY-MM-DD
-                    Date futureDate = dateFormat.parse("2021-6-2");
+                    Date futureDate;
+                    futureDate = dateFormat.parse("2021-6-2");
                     Date currentDate = new Date();
                     if (!currentDate.after(futureDate)) {
-                        long diff = futureDate.getTime() + (8 * 60 * 60 * 1000)
+                        assert futureDate != null;
+                        long diff = (futureDate.getTime() + (8 * 60 * 60 * 1000))
                                 - currentDate.getTime();
                         long days = diff / (24 * 60 * 60 * 1000);
                         diff -= days * (24 * 60 * 60 * 1000);
