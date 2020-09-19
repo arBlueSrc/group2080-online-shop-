@@ -40,8 +40,8 @@ public interface ApiService {
                                      @Query("type") String type,
                                      @Query("otp") String username);
 
-    @POST("get_category_posts")
-    Call<NewsRetrofit> news (@Query("id") int id);
+    @POST("get_posts")
+    Call<NewsRetrofit> news ();
 
     @POST("get_category_posts")
     Call<NewsRetrofit> notification (@Query("id") int id);

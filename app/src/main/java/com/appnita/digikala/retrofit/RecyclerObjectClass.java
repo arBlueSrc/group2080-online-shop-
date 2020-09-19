@@ -23,6 +23,17 @@ public class RecyclerObjectClass {
     @ColumnInfo(name = "post_content")
     private String content;
 
+    @ColumnInfo(name = "post_category")
+    private int category;
+
+    public int getCategory() {
+        return category;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
+    }
+
     public String getUrl() {
         return url;
     }

@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
     private Handler handler;
     private Runnable runnable;
-    RecyclerViewSkeletonScreen skeletonScreen1,skeletonScreen2,skeletonScreen3;
+    RecyclerViewSkeletonScreen skeletonScreen1, skeletonScreen2, skeletonScreen3;
 
 
     PostsDao postsDao;
@@ -92,188 +92,78 @@ public class HomeFragment extends Fragment {
 //        postsDao.insert(rvOBJ);
 
         //retrofit setting
-        RetrofitConfigurationNews();
-        RetrofitConfigurationConsult();
-        RetrofitConfigurationClass();
+//        RetrofitConfigurationNews();
+//        RetrofitConfigurationConsult();
+//        RetrofitConfigurationClass();
 
-
+        RetrofitConfiguration();
         return binding.getRoot();
     }
 
-    private void RetrofitConfigurationNews() {
-
-
+    private void RetrofitConfiguration() {
         //server config
         RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
         ApiService apiService = retrofit.getApiService();
 
 
-        Call<NewsRetrofit> call = apiService.news(393);
+        Call<NewsRetrofit> call = apiService.news();
         call.enqueue(new Callback<NewsRetrofit>() {
             @Override
             public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
                 if (response.isSuccessful()) {
-                    List<NewsRetrofit.posts> list = new ArrayList<>();
+                    List<NewsRetrofit.posts> list;
                     list = response.body().getNews();
 
-                    List<RecyclerObjectClass> rvList = new ArrayList<>();
 
-                    if(postsDao.getAllPosts().size()==0){
-                        for (int i = list.size() - 1; i >= 0; i--) {
+                    if (postsDao.getAllPosts().size() == 0) {
+                        for (int i = list.size() - 1; i >= 0; i--) {//
                             RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
                             rvOBJ.setTitle(list.get(i).getTitle());
                             rvOBJ.setContent(list.get(i).getContent());
                             rvOBJ.setImage(list.get(i).getThumbnail());
                             rvOBJ.setUrl(list.get(i).getUrl());
+                            rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
                             postsDao.insert(rvOBJ);
                         }
-                    }
 
-                    if (list.get(list.size() - 1).getTitle().equals
-                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
+                        if (list.get(list.size() - 1).getTitle().equals
+                                (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
 
-                        for (int i = list.size() - 1; i >= 0; i--) {
-                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                            rvOBJ.setTitle(list.get(i).getTitle());
-                            rvOBJ.setContent(list.get(i).getContent());
-                            rvOBJ.setImage(list.get(i).getThumbnail());
-                            rvOBJ.setUrl(list.get(i).getUrl());
-                            postsDao.insert(rvOBJ);
+                            for (int i = list.size() - 1; i >= 0; i--) {
+                                RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                                rvOBJ.setTitle(list.get(i).getTitle());
+                                rvOBJ.setContent(list.get(i).getContent());
+                                rvOBJ.setImage(list.get(i).getThumbnail());
+                                rvOBJ.setUrl(list.get(i).getUrl());
+                                rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
+                                postsDao.insert(rvOBJ);
+                            }
                         }
+
+                        skeletonScreen3.hide();
+                        //recycler view
+                        RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
+                        RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
+                        RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
+                    } else {
+                        skeletonScreen3.hide();
+                        RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
+                        RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
+                        RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
                     }
-
-                    skeletonScreen1.hide();
-                    //recycler view
-                    RecyclerViewConfiqurationNews(postsDao.getAllPosts());
-                } else {
-                    skeletonScreen1.hide();
-                    RecyclerViewConfiqurationNews(postsDao.getAllPosts());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<NewsRetrofit> call, Throwable t) {
-                skeletonScreen1.hide();
-                Toast.makeText(getContext(), "خظا در برقراری ارتباط", Toast.LENGTH_SHORT).show();
-                RecyclerViewConfiqurationNews(postsDao.getAllPosts());
-            }
-        });
-    }
-
-    private void RetrofitConfigurationConsult() {
-        //server config
-        RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
-        ApiService apiService = retrofit.getApiService();
-
-
-        Call<NewsRetrofit> call = apiService.news(388);
-        call.enqueue(new Callback<NewsRetrofit>() {
-            @Override
-            public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
-                if (response.isSuccessful()) {
-                    List<NewsRetrofit.posts> list = new ArrayList<>();
-                    list = response.body().getNews();
-
-                    List<RecyclerObjectClass> rvList = new ArrayList<>();
-
-                    if(postsDao.getAllPosts().size()==0){
-                        for (int i = list.size() - 1; i >= 0; i--) {
-                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                            rvOBJ.setTitle(list.get(i).getTitle());
-                            rvOBJ.setContent(list.get(i).getContent());
-                            rvOBJ.setImage(list.get(i).getThumbnail());
-                            rvOBJ.setUrl(list.get(i).getUrl());
-                            postsDao.insert(rvOBJ);
-                        }
-                    }
-
-                    if (list.get(list.size() - 1).getTitle().equals
-                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
-
-                        for (int i = list.size() - 1; i >= 0; i--) {
-                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                            rvOBJ.setTitle(list.get(i).getTitle());
-                            rvOBJ.setContent(list.get(i).getContent());
-                            rvOBJ.setImage(list.get(i).getThumbnail());
-                            rvOBJ.setUrl(list.get(i).getUrl());
-                            postsDao.insert(rvOBJ);
-                        }
-                    }
-
-                    skeletonScreen2.hide();
-                    //recycler view
-                    RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
-                } else {
-                    skeletonScreen2.hide();
-                    RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<NewsRetrofit> call, Throwable t) {
-                skeletonScreen2.hide();
-                RecyclerViewConfiqurationConsult(postsDao.getAllPosts());
-            }
-        });
-    }
-
-    private void RetrofitConfigurationClass() {
-        //server config
-        RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
-        ApiService apiService = retrofit.getApiService();
-
-
-        Call<NewsRetrofit> call = apiService.news(394);
-        call.enqueue(new Callback<NewsRetrofit>() {
-            @Override
-            public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
-                if (response.isSuccessful()) {
-                    List<NewsRetrofit.posts> list = new ArrayList<>();
-                    list = response.body().getNews();
-
-                    List<RecyclerObjectClass> rvList = new ArrayList<>();
-
-                    if(postsDao.getAllPosts().size()==0){
-                        for (int i = list.size() - 1; i >= 0; i--) {
-                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                            rvOBJ.setTitle(list.get(i).getTitle());
-                            rvOBJ.setContent(list.get(i).getContent());
-                            rvOBJ.setImage(list.get(i).getThumbnail());
-                            rvOBJ.setUrl(list.get(i).getUrl());
-                            postsDao.insert(rvOBJ);
-                        }
-                    }
-
-                    if (list.get(list.size() - 1).getTitle().equals
-                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
-
-                        for (int i = list.size() - 1; i >= 0; i--) {
-                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                            rvOBJ.setTitle(list.get(i).getTitle());
-                            rvOBJ.setContent(list.get(i).getContent());
-                            rvOBJ.setImage(list.get(i).getThumbnail());
-                            rvOBJ.setUrl(list.get(i).getUrl());
-                            postsDao.insert(rvOBJ);
-                        }
-                    }
-
-                    skeletonScreen3.hide();
-                    //recycler view
-                    RecyclerViewConfiqurationClass(postsDao.getAllPosts());
-                } else {
-                    skeletonScreen3.hide();
-                    RecyclerViewConfiqurationClass(postsDao.getAllPosts());
                 }
             }
 
             @Override
             public void onFailure(Call<NewsRetrofit> call, Throwable t) {
                 skeletonScreen3.hide();
-                RecyclerViewConfiqurationClass(postsDao.getAllPosts());
+                RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
+                RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
+                RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
             }
+
         });
     }
-
 
     private void RecyclerViewConfiqurationNews(List<RecyclerObjectClass> list) {
         RecyclerAdapterNews adapter = new RecyclerAdapterNews(getContext(), list);

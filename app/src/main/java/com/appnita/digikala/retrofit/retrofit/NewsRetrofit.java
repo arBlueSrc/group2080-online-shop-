@@ -64,6 +64,44 @@ public class NewsRetrofit {
             private String content;
         }
 
+        @SerializedName("categories")
+        @Expose
+        private List<categories> categories = null;
+
+        public List<NewsRetrofit.posts.categories> getCategories() {
+            return categories;
+        }
+
+        public void setCategories(List<NewsRetrofit.posts.categories> categories) {
+            this.categories = categories;
+        }
+
+        public class categories {
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public int getParent() {
+                return parent;
+            }
+
+            public void setParent(int parent) {
+                this.parent = parent;
+            }
+
+            @SerializedName("id")
+            @Expose
+            private int id;
+
+            @SerializedName("parent")
+            @Expose
+            private int parent;
+        }
+
         @SerializedName("Type")
         @Expose
         private String Type;
