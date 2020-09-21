@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainMajorBinding binding;
 
-
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

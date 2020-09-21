@@ -42,7 +42,7 @@ public class RecyclerAdapterNews extends RecyclerView.Adapter<RecyclerAdapterNew
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         RecyclerObjectClass recyclerObject = list.get(position);
-        Picasso.get()
+        Picasso.with(context)
                 .load(recyclerObject.getImage())
                 .placeholder(R.drawable.error)
                 .into(holder.imageview);

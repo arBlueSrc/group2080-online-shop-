@@ -27,4 +27,5 @@ public interface PostsDao {
 
     @Query("SELECT * FROM posts_table WHERE post_category = :postCategory")
     List<RecyclerObjectClass> getCategoraizedPosts(int postCategory);
+
 }

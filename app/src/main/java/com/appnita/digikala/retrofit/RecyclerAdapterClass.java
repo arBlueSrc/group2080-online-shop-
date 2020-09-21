@@ -44,7 +44,7 @@ public class RecyclerAdapterClass extends RecyclerView.Adapter<RecyclerAdapterCl
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         RecyclerObjectClass recyclerObject = list.get(position);
 //        holder.imageview.setImageResource(R.drawable.ic_launcher_background);
-        Picasso.get()
+        Picasso.with(context)
                 .load(recyclerObject.getImage())
                 .placeholder(R.drawable.error)
                 .into(holder.imageview);

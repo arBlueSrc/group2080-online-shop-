@@ -149,7 +149,5 @@ public class NewsRetrofit {
         public void setThumbnail(String thumbnail) {
             this.thumbnail = thumbnail;
         }
-
-
     }
 }

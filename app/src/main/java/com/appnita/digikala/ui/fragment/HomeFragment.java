@@ -22,10 +22,14 @@ import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
 import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
 import com.appnita.digikala.retrofit.room.PostsDao;
 import com.appnita.digikala.retrofit.room.PostsDatabase;
+import com.appnita.digikala.ui.slider.SliderItem;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,10 +52,36 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
 
+        //slider
+        
+
         //timer for event
         countDownStart();
 
         //skeleton
+        skeleton();
+
+        //Room
+        postsDao = PostsDatabase.getDatabase(getContext()).postsDao();
+
+
+        RetrofitConfiguration();
+        return binding.getRoot();
+    }
+
+    private void slider(List<SliderItem> sliderList) {
+
+        for (int i = 0; i < sliderList.size(); i++) {
+            TextSliderView textSliderView = new TextSliderView(getContext());
+            textSliderView.image(sliderList.get(i).getImage())
+                    .setScaleType(BaseSliderView.ScaleType.Fit);
+            textSliderView.description(sliderList.get(i).getTitle());
+            binding.slider.addSlider(textSliderView);
+        }
+
+    }
+
+    private void skeleton() {
         RecyclerAdapterNews adapter = new RecyclerAdapterNews();
         skeletonScreen1 = Skeleton.bind(binding.rvNews)
                 .adapter(adapter)
@@ -72,13 +102,6 @@ public class HomeFragment extends Fragment {
                 .duration(2000)
                 .load(R.layout.item_skeleton)
                 .show();
-
-        //Room
-        postsDao = PostsDatabase.getDatabase(getContext()).postsDao();
-
-
-        RetrofitConfiguration();
-        return binding.getRoot();
     }
 
     private void RetrofitConfiguration() {
@@ -106,24 +129,33 @@ public class HomeFragment extends Fragment {
                             rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
                             postsDao.insert(rvOBJ);
                         }
-
-                        if (list.get(list.size() - 1).getTitle().equals
-                                (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
-
-                            for (int i = list.size() - 1; i >= 0; i--) {
-                                RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-                                rvOBJ.setTitle(list.get(i).getTitle());
-                                rvOBJ.setContent(list.get(i).getContent());
-                                rvOBJ.setImage(list.get(i).getThumbnail());
-                                rvOBJ.setUrl(list.get(i).getUrl());
-                                rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
-                                postsDao.insert(rvOBJ);
-                            }
-                        }
-
-                        //recycler view
                     }
+
+                    if (!list.get(list.size() - 1).getTitle().equals
+                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
+
+                        postsDao.deleteall();
+                        for (int i = list.size() - 1; i >= 0; i--) {
+                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
+                            rvOBJ.setTitle(list.get(i).getTitle());
+                            rvOBJ.setContent(list.get(i).getContent());
+                            rvOBJ.setImage(list.get(i).getThumbnail());
+                            rvOBJ.setUrl(list.get(i).getUrl());
+                            rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
+                            postsDao.insert(rvOBJ);
+                        }
+                    }
+
+
                     skeletonScreen3.hide();
+                    //-----------------
+                    List<SliderItem> list2 = new ArrayList<>();
+                    for (int i = 0; i < postsDao.getCategoraizedPosts(398).size(); i++) {
+                        list2.add(new SliderItem(postsDao.getCategoraizedPosts(398).get(i).getTitle()
+                                , postsDao.getCategoraizedPosts(398).get(i).getImage()));
+                    }
+                    slider(list2);
+
                     RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
                     RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
                     RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
@@ -144,6 +176,7 @@ public class HomeFragment extends Fragment {
     private void RecyclerViewConfiqurationNews(List<RecyclerObjectClass> list) {
         RecyclerAdapterNews adapter = new RecyclerAdapterNews(getContext(), list);
         binding.rvNews.setAdapter(adapter);
+
     }
 
     private void RecyclerViewConfiqurationConsult(List<RecyclerObjectClass> list) {

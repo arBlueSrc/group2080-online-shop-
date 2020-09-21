@@ -28,11 +28,10 @@ public class ProductDetail extends AppCompatActivity {
         Intent intent = getIntent();
         binding.title.setText(intent.getStringExtra("title"));
         binding.content.setText(intent.getStringExtra("title"));
-        Picasso.get()
+        Picasso.with(this)
                 .load(intent.getStringExtra("image"))
                 .error(R.drawable.error)
                 .resize(1000, 1000)
-                .onlyScaleDown()
                 .into(binding.image);
         binding.detailPrice.setText(intent.getStringExtra("price")+" تومان");
 

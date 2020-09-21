@@ -45,11 +45,10 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
         Products products = list.get(position);
 
         String imageUrl = products.getImages().get(0).getSrc();
-        Picasso.get()
+        Picasso.with(context)
                 .load(imageUrl)
                 .placeholder(R.drawable.error)
                 .resize(1000, 1000)
-                .onlyScaleDown()
                 .into(holder.image);
         holder.name.setText(products.getName());
         holder.price.setText(products.getPrice());
