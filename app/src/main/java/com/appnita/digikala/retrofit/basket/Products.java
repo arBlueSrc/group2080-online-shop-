@@ -108,4 +108,30 @@ public class Products {
     @SerializedName("description")
     @Expose
     private String description;
+
+    public List<Downloads> getDownloads() {
+        return downloads;
+    }
+
+    public void setDownloads(List<Downloads> downloads) {
+        this.downloads = downloads;
+    }
+
+    @SerializedName("downloads")
+    @Expose
+    private List<Downloads> downloads;
+
+    public class Downloads{
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        @SerializedName("id")
+        @Expose
+        private String id;
+    }
 }

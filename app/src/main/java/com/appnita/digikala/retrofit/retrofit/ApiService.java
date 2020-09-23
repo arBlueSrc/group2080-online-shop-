@@ -7,21 +7,12 @@ import java.util.List;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import okhttp3.internal.concurrent.Task;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
-import retrofit2.http.Url;
 
 public interface ApiService {
 
@@ -62,7 +53,7 @@ public interface ApiService {
     Call<List<BuyProduct>> getCustomerProduct(@Query("customer") int id);
 
     @Streaming
-    @GET("string")
+    @GET(".")
     Call<ResponseBody> downloadFileByUrl(@Query("email") String email,
                                          @Query("download_file") int downloadFile,
                                          @Query("order") String order,

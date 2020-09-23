@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,13 +19,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appnita.digikala.BuyProductClassForRecycler;
 import com.appnita.digikala.MyFilesAdapter;
 import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentFiveBinding;
 import com.appnita.digikala.retrofit.basket.BuyProduct;
+import com.appnita.digikala.retrofit.basket.Products;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
-import com.appnita.digikala.ui.MainActivity;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 
@@ -45,14 +45,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static android.content.ContentValues.TAG;
-import static okhttp3.OkHttpClient.*;
-
 
 public class FiveFragment extends Fragment {
 
+    private static final String TAG = "FiveFragment";
+    DownloadZipFileTask downloadZipFileTask;
+
     FragmentFiveBinding binding;
     RecyclerViewSkeletonScreen skeletonScreen;
+    int counter;
+    final static List<String> backList = new ArrayList<>();
+
+    boolean getKeys = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,39 +71,7 @@ public class FiveFragment extends Fragment {
                 .show();
 
         RetrofitConfig();
-        isStoragePermissionGranted();
         return binding.getRoot();
-    }
-
-
-    private void isStoragePermissionGranted() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    100);
-
-        } else {
-//            DownloadPDF();
-//            downloadZipFile();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        if (requestCode == 100) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                DownloadPDF();
-//                downloadZipFile();
-            } else {
-                Toast.makeText(getContext(), "toro khoda persmission bede!!!", Toast.LENGTH_SHORT).show();
-                isStoragePermissionGranted();
-            }
-        }
-
     }
 
     private void RetrofitConfig() {
@@ -116,13 +88,61 @@ public class FiveFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<BuyProduct> products = response.body();
 
-                    List<BuyProduct.ProductId> listCustomer = new ArrayList<>();
+                    List<Integer> proID = new ArrayList<>();
                     for (int i = 0; i < products.size(); i++) {
-                        listCustomer.addAll(products.get(i).getLineItems());
+                        for (int j = 0; j < products.get(i).getLineItems().size(); j++) {
+                            proID.add(Integer.valueOf(products.get(i).getLineItems().get(j).getProductId()));
+                        }
                     }
 
-                    Log.d("test list customer", "onResponse: " + products.size());
-//                    skeletonScreen.hide();
+                    getProductKey(proID, products);
+
+                } else {
+                    skeletonScreen.hide();
+                    Toast.makeText(getContext(), "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BuyProduct>> call, Throwable t) {
+                skeletonScreen.hide();
+                Toast.makeText(getContext(), "oh  " + t, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getProductKey(List<Integer> a, List<BuyProduct> products) {
+        RetrofitBasket retrofit;
+        ApiService apiService;
+
+        retrofit = new RetrofitBasket();
+        apiService = retrofit.getApiService();
+
+        Call<List<Products>> call = apiService.getProductsBasket(a);
+        call.enqueue(new Callback<List<Products>>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
+                if (response.isSuccessful()) {
+                    getKeys = true;
+                    List<Products> product = response.body();
+
+                    for (int i = 0; i < product.size(); i++) {
+                        backList.add(product.get(i).getDownloads().get(0).getId());
+                    }
+
+                    counter = 0;
+                    List<BuyProductClassForRecycler> listCustomer = new ArrayList<>();
+                    for (int i = 0; i < products.size(); i++) {
+                        for (int j = 0; j < products.get(i).getLineItems().size(); j++) {
+                            listCustomer.add(new BuyProductClassForRecycler(products.get(i).getOrderKey(),
+                                    products.get(i).getLineItems().get(j).getProductId(),
+                                    products.get(0).getBilling().getEmail(),
+                                    String.valueOf(backList.get(counter))));
+                            counter++;
+                        }
+                    }
+                    skeletonScreen.hide();
                     if (products.size() != 0) {
                         binding.notice.setVisibility(View.GONE);
                         MyFilesAdapter productAdapter = new MyFilesAdapter(getContext(), listCustomer);
@@ -132,17 +152,182 @@ public class FiveFragment extends Fragment {
                         binding.notice.setVisibility(View.VISIBLE);
                     }
 
+                    Log.d("test list2 : ", backList.toString());
+
+
                 } else {
                     Toast.makeText(getContext(), "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<BuyProduct>> call, Throwable t) {
-                Toast.makeText(getContext(), "oh  " + t, Toast.LENGTH_LONG).show();
+            public void onFailure(Call<List<Products>> call, Throwable t) {
+                Toast.makeText(getContext(), "oh shit  " + t, Toast.LENGTH_LONG).show();
             }
         });
     }
 
 
+
+
+
+    private void downloadZipFile() {
+
+        ApiService downloadService = createService(ApiService.class, "https://www.group2080.ir/");
+        Call<ResponseBody> call = downloadService.downloadFileByUrl("arashmirzaie.1997%40gmail.com",
+                4838, "wc_order_gpnR9KV49XWKn", "af7a9926-8066-4270-8dec-de38cf94ea7b");
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, final Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "Got the body for the file");
+
+                    Toast.makeText(getContext(), "Downloading...", Toast.LENGTH_SHORT).show();
+
+                    downloadZipFileTask = new DownloadZipFileTask();
+                    downloadZipFileTask.execute(response.body());
+
+                } else {
+                    Log.d(TAG, "Connection failed " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                Log.e(TAG, t.getMessage());
+            }
+        });
+    }
+
+    public <T> T createService(Class<T> serviceClass, String baseUrl) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(new OkHttpClient.Builder().build())
+                .build();
+        return retrofit.create(serviceClass);
+    }
+
+    private class DownloadZipFileTask extends AsyncTask<ResponseBody, Pair<Integer, Long>, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(ResponseBody... urls) {
+            //Copy you logic to calculate progress and call
+            saveToDisk(urls[0], "journaldev-project.pdf");
+            return null;
+        }
+
+        protected void onProgressUpdate(Pair<Integer, Long>... progress) {
+
+            Log.d("API123", progress[0].second + " ");
+
+            if (progress[0].first == 100)
+                Toast.makeText(getContext(), "File downloaded successfully", Toast.LENGTH_SHORT).show();
+
+
+            if (progress[0].second > 0) {
+                int currentProgress = (int) ((double) progress[0].first / (double) progress[0].second * 100);
+//                progressBar.setProgress(currentProgress);
+//
+//                txtProgressPercent.setText("Progress " + currentProgress + "%");
+
+            }
+
+            if (progress[0].first == -1) {
+                Toast.makeText(getContext(), "Download failed", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        public void doProgress(Pair<Integer, Long> progressDetails) {
+            publishProgress(progressDetails);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+    }
+
+    private void saveToDisk(ResponseBody body, String filename) {
+        try {
+
+            File destinationFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename);
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(destinationFile);
+                byte data[] = new byte[4096];
+                int count;
+                int progress = 0;
+                long fileSize = body.contentLength();
+                Log.d(TAG, "File Size=" + fileSize);
+                while ((count = inputStream.read(data)) != -1) {
+                    outputStream.write(data, 0, count);
+                    progress += count;
+                    Pair<Integer, Long> pairs = new Pair<>(progress, fileSize);
+                    downloadZipFileTask.doProgress(pairs);
+                    Log.d(TAG, "Progress: " + progress + "/" + fileSize + " >>>> " + (float) progress / fileSize);
+                }
+
+                outputStream.flush();
+
+                Log.d(TAG, destinationFile.getParent());
+                Pair<Integer, Long> pairs = new Pair<>(100, 100L);
+                downloadZipFileTask.doProgress(pairs);
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+                Pair<Integer, Long> pairs = new Pair<>(-1, Long.valueOf(-1));
+                downloadZipFileTask.doProgress(pairs);
+                Log.d(TAG, "Failed to save the file!");
+                return;
+            } finally {
+                if (inputStream != null) inputStream.close();
+                if (outputStream != null) outputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "Failed to save the file!");
+            return;
+        }
+    }
+
+    private void askForPermission(String permission, Integer requestCode) {
+        if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
+
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{permission}, requestCode);
+            }
+        } else if (ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_DENIED) {
+            Toast.makeText(getContext(), "Permission was denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ActivityCompat.checkSelfPermission(getContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED) {
+
+            if (requestCode == 101)
+                Toast.makeText(getContext(), "Permission granted", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -7,6 +7,13 @@ import java.util.List;
 
 public class BuyProduct {
 
+    public BuyProduct(String orderKey, List<ProductId> lineItems, Billing billing, String key) {
+        this.orderKey = orderKey;
+        this.lineItems = lineItems;
+        this.billing = billing;
+        this.key = key;
+    }
+
     @SerializedName("id")
     @Expose
     private int id;
@@ -96,5 +103,15 @@ public class BuyProduct {
         @Expose
         private String email;
 
+    }
+
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

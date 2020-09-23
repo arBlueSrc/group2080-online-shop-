@@ -27,6 +27,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater);
 
         //slider
-        
+
 
         //timer for event
         countDownStart();
@@ -74,7 +75,7 @@ public class HomeFragment extends Fragment {
         for (int i = 0; i < sliderList.size(); i++) {
             TextSliderView textSliderView = new TextSliderView(getContext());
             textSliderView.image(sliderList.get(i).getImage())
-                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                    .setScaleType(BaseSliderView.ScaleType.FitCenterCrop);
             textSliderView.description(sliderList.get(i).getTitle());
             binding.slider.addSlider(textSliderView);
         }

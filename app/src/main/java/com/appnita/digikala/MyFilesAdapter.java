@@ -15,14 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.appnita.digikala.retrofit.basket.BuyProduct;
 import com.appnita.digikala.retrofit.basket.Products;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyFilesAdapter extends RecyclerView.Adapter<MyFilesAdapter.ViewHolder> {
 
     Context context;
-    List<BuyProduct.ProductId> list;
+    List<BuyProductClassForRecycler> list = new ArrayList<>();
 
-    public MyFilesAdapter(Context context, List<BuyProduct.ProductId> list) {
+    public MyFilesAdapter(Context context, List<BuyProductClassForRecycler> list) {
         this.context = context;
         this.list = list;
     }
@@ -40,8 +41,8 @@ public class MyFilesAdapter extends RecyclerView.Adapter<MyFilesAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BuyProduct.ProductId file = list.get(position);
-        holder.title.setText(file.getName());
+        BuyProductClassForRecycler file = list.get(position);
+        holder.title.setText(file.getProductID());
 
     }
 
