@@ -38,9 +38,6 @@ public class ThreeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentThreeBinding.inflate(inflater);
 
-        binding.btnDarsad.setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), Darsad.class));
-        });
 
         AdapterProducts adapter = new AdapterProducts();
         skeletonScreen = Skeleton.bind(binding.rvProducts)

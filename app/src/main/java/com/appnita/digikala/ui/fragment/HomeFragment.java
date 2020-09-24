@@ -1,11 +1,13 @@
 package com.appnita.digikala.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentHomeBinding;
+import com.appnita.digikala.extraApp.Darsad;
 import com.appnita.digikala.retrofit.RecyclerAdapterClass;
 import com.appnita.digikala.retrofit.RecyclerAdapterConsult;
 import com.appnita.digikala.retrofit.RecyclerAdapterNews;
@@ -66,6 +69,11 @@ public class HomeFragment extends Fragment {
         postsDao = PostsDatabase.getDatabase(getContext()).postsDao();
 
 
+        //image darsad
+        binding.btnDarsad.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), Darsad.class));
+        });
+
         RetrofitConfiguration();
         return binding.getRoot();
     }
@@ -87,6 +95,7 @@ public class HomeFragment extends Fragment {
         skeletonScreen1 = Skeleton.bind(binding.rvNews)
                 .adapter(adapter)
                 .duration(2000)
+                .color(R.color.skeleton)
                 .load(R.layout.item_skeleton)
                 .show();
 
@@ -94,6 +103,7 @@ public class HomeFragment extends Fragment {
         skeletonScreen2 = Skeleton.bind(binding.rvConsult)
                 .adapter(adapter2)
                 .duration(2000)
+                .color(R.color.skeleton)
                 .load(R.layout.item_skeleton)
                 .show();
 
@@ -101,6 +111,7 @@ public class HomeFragment extends Fragment {
         skeletonScreen3 = Skeleton.bind(binding.rvClass)
                 .adapter(adapter3)
                 .duration(2000)
+                .color(R.color.skeleton)
                 .load(R.layout.item_skeleton)
                 .show();
     }
@@ -120,6 +131,7 @@ public class HomeFragment extends Fragment {
                     List<NewsRetrofit.posts> list = response.body().getNews();
 
 
+
                     if (postsDao.getAllPosts().size() == 0) {
                         for (int i = list.size() - 1; i >= 0; i--) {//
                             RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
@@ -132,6 +144,9 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
+                    Log.d("test1", "onResponse: "+list.get(list.size() - 1).getTitle());
+                    Log.d("test2", "onResponse: "+postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle());
+
                     if (!list.get(list.size() - 1).getTitle().equals
                             (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
 
@@ -143,13 +158,14 @@ public class HomeFragment extends Fragment {
                             rvOBJ.setImage(list.get(i).getThumbnail());
                             rvOBJ.setUrl(list.get(i).getUrl());
                             rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
+                            Log.d("categorys", "onResponse: " + list.get(i).getCategories().get(0).getId());
                             postsDao.insert(rvOBJ);
                         }
                     }
 
 
                     skeletonScreen3.hide();
-                    //-----------------
+                    //slider
                     List<SliderItem> list2 = new ArrayList<>();
                     for (int i = 0; i < postsDao.getCategoraizedPosts(398).size(); i++) {
                         list2.add(new SliderItem(postsDao.getCategoraizedPosts(398).get(i).getTitle()
@@ -158,6 +174,7 @@ public class HomeFragment extends Fragment {
                     slider(list2);
 
                     RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
+                    Log.d("categorys", "onResponse: "+postsDao.getCategoraizedPosts(398).size());
                     RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
                     RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
                 }

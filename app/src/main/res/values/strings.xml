@@ -16,7 +16,7 @@
 
     <string name="bottom_menu_1">خانه</string>
     <string name="bottom_menu_2">مشاوره</string>
-    <string name="bottom_menu_3">ویژه کنکوری ها</string>
+    <string name="bottom_menu_3">فروشگاه</string>
     <string name="bottom_menu_4">تنظیمات</string>
     <string name="moshaver_ad_article">اگه در جستجوی بهترین مشاور کنکور هستید و به یک برنامه درسی خوب برای کنکور همراه با پیگیری مداوم و مشاوره کنکور بلند مدت نیاز دارید، حتما خدمات گروه آموزشی ۲۰۸۰ را بررسی کنید تا وقت و هزینه خود را با انتخاب یک مشاور نامعتبر هدر ندهید.
 
@@ -65,7 +65,7 @@
     <string name="ad_title">مشاوره تحصیلی ۲۰۸۰</string>
     <string name="channel_description">description for notif</string>
     <string name="channel_name">name for notif</string>
-    <string name="bottom_menu_5">فایل های من</string>
+    <string name="bottom_menu_5">۲۰۸۰ من</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

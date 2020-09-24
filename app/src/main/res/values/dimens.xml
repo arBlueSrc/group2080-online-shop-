@@ -11,5 +11,6 @@
     <dimen name="comment_redius">32dp</dimen>
     <dimen name="button_redius">12dp</dimen>
     <dimen name="edt_redius">12dp</dimen>
+    <dimen name="item_recycler_radius">12dp</dimen>
 
 </resources>
