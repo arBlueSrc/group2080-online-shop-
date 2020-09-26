@@ -1,4 +1,4 @@
-package com.appnita.digikala.retrofit;
+package com.appnita.digikala.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;

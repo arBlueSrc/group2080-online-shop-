@@ -1,4 +1,4 @@
-package com.appnita.digikala.retrofit;
+package com.appnita.digikala.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.R;
 import com.appnita.digikala.WebPage;
+import com.appnita.digikala.ui.RecyclerObjectClass;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

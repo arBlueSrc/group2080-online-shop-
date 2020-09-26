@@ -43,7 +43,7 @@
         <activity android:name=".ui.Register2" />
         <activity android:name=".ui.Register" />
         <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".retrofit.ArticlePage" />
+        <activity android:name=".ui.ArticlePage" />
         <activity android:name=".ui.MainActivity">
 
         </activity>

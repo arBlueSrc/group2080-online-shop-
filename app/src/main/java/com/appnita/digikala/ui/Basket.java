@@ -6,15 +6,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.appnita.digikala.BasketAdapter;
+import com.appnita.digikala.adapter.BasketAdapter;
 import com.appnita.digikala.Lists;
-import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.ActivityBasketBinding;
-import com.appnita.digikala.databinding.NavigationBinding;
-import com.appnita.digikala.retrofit.basket.AdapterProducts;
 import com.appnita.digikala.retrofit.basket.Products;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
 import com.appnita.digikala.retrofit.retrofit.ApiService;

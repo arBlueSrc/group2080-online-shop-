@@ -1,4 +1,4 @@
-package com.appnita.digikala;
+package com.appnita.digikala.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.appnita.digikala.Lists;
+import com.appnita.digikala.R;
 import com.appnita.digikala.retrofit.basket.Products;
 
 import java.util.List;

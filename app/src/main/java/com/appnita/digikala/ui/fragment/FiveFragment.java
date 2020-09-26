@@ -1,12 +1,10 @@
 package com.appnita.digikala.ui.fragment;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -20,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.appnita.digikala.BuyProductClassForRecycler;
-import com.appnita.digikala.MyFilesAdapter;
+import com.appnita.digikala.adapter.MyFilesAdapter;
 import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentFiveBinding;
 import com.appnita.digikala.retrofit.basket.BuyProduct;

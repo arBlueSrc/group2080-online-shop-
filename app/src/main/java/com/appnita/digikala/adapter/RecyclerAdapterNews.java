@@ -1,4 +1,4 @@
-package com.appnita.digikala.retrofit;
+package com.appnita.digikala.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,23 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.R;
 import com.appnita.digikala.WebPage;
+import com.appnita.digikala.ui.RecyclerObjectClass;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class RecyclerAdapterClass extends RecyclerView.Adapter<RecyclerAdapterClass.MyViewHolder> {
+public class RecyclerAdapterNews extends RecyclerView.Adapter<RecyclerAdapterNews.MyViewHolder> {
 
     Context context;
     List<RecyclerObjectClass> list;
 
-    public RecyclerAdapterClass() {
+    public RecyclerAdapterNews() {
     }
 
-    public RecyclerAdapterClass(Context context, List<RecyclerObjectClass> list) {
+    public RecyclerAdapterNews(Context context, List<RecyclerObjectClass> list) {
         this.context = context;
         this.list = list;
     }
-
 
     @NonNull
     @Override
@@ -43,7 +43,6 @@ public class RecyclerAdapterClass extends RecyclerView.Adapter<RecyclerAdapterCl
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         RecyclerObjectClass recyclerObject = list.get(position);
-//        holder.imageview.setImageResource(R.drawable.ic_launcher_background);
         Picasso.with(context)
                 .load(recyclerObject.getImage())
                 .placeholder(R.drawable.error)
@@ -66,8 +65,6 @@ public class RecyclerAdapterClass extends RecyclerView.Adapter<RecyclerAdapterCl
             }
         });
     }
-
-
 
     @Override
     public int getItemCount() {

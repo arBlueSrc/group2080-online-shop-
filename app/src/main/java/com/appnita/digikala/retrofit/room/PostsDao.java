@@ -1,12 +1,11 @@
 package com.appnita.digikala.retrofit.room;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.appnita.digikala.retrofit.RecyclerObjectClass;
+import com.appnita.digikala.ui.RecyclerObjectClass;
 
 import java.util.List;
 

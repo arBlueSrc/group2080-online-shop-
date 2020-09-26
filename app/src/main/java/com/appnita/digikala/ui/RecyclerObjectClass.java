@@ -1,4 +1,4 @@
-package com.appnita.digikala.retrofit;
+package com.appnita.digikala.ui;
 
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;

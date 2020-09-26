@@ -2,7 +2,6 @@ package com.appnita.digikala.retrofit.basket;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.R;
-import com.appnita.digikala.retrofit.RecyclerAdapterClass;
-import com.appnita.digikala.retrofit.RecyclerObjectClass;
 import com.appnita.digikala.ui.ProductDetail;
 import com.squareup.picasso.Picasso;
 
