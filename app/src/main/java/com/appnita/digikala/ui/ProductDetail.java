@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.appnita.digikala.BasketClass;
+import com.appnita.digikala.retrofit.basket.BasketClass;
 import com.appnita.digikala.Lists;
 import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.LayoutProductDetailsBinding;

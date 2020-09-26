@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SplashActivity">
+        <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +39,7 @@
         </activity>
         <activity android:name=".ui.ProductDetail" />
         <activity android:name=".extraApp.Darsad" />
-        <activity android:name=".WebPage" />
+        <activity android:name=".ui.WebPage" />
         <activity android:name=".ui.Register2" />
         <activity android:name=".ui.Register" />
         <activity android:name=".ui.LoginActivity" />
@@ -48,7 +48,7 @@
 
         </activity>
 
-        <receiver android:name=".ConnectivityDetection">
+        <receiver android:name=".notification.ConnectivityDetection">
             <intent-filter>
                 <action
                     android:name="android.net.conn.CONNECTIVITY_CHANGE"

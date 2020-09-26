@@ -1,4 +1,4 @@
-package com.appnita.digikala;
+package com.appnita.digikala.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

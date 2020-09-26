@@ -1,4 +1,4 @@
-package com.appnita.digikala;
+package com.appnita.digikala.ui;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package com.appnita.digikala;
+package com.appnita.digikala.retrofit.basket;
 
 public class BasketClass {
     private int id;

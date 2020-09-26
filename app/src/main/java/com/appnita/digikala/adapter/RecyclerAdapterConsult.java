@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.R;
-import com.appnita.digikala.WebPage;
+import com.appnita.digikala.ui.WebPage;
 import com.appnita.digikala.ui.RecyclerObjectClass;
 import com.squareup.picasso.Picasso;
 

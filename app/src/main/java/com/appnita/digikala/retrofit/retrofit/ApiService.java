@@ -1,7 +1,7 @@
 package com.appnita.digikala.retrofit.retrofit;
 
 import com.appnita.digikala.retrofit.basket.BuyProduct;
-import com.appnita.digikala.retrofit.basket.Products;
+import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 
 import java.util.List;
 
@@ -44,10 +44,10 @@ public interface ApiService {
     Call<NewsRetrofit> notification (@Query("id") int id);
 
     @GET("products")
-    Call<List<Products>> getProducts();
+    Call<List<ResponseProduct>> getProducts();
 
     @GET("products")
-    Call<List<Products>> getProductsBasket(@Query("include[]") List<Integer> id);
+    Call<List<ResponseProduct>> getProductsBasket(@Query("include[]") List<Integer> id);
 
     @GET("orders")
     Call<List<BuyProduct>> getCustomerProduct(@Query("customer") int id);

@@ -22,8 +22,8 @@ import com.appnita.digikala.adapter.MyFilesAdapter;
 import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentFiveBinding;
 import com.appnita.digikala.retrofit.basket.BuyProduct;
-import com.appnita.digikala.retrofit.basket.Products;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
+import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
@@ -116,14 +116,14 @@ public class FiveFragment extends Fragment {
         retrofit = new RetrofitBasket();
         apiService = retrofit.getApiService();
 
-        Call<List<Products>> call = apiService.getProductsBasket(a);
-        call.enqueue(new Callback<List<Products>>() {
+        Call<List<ResponseProduct>> call = apiService.getProductsBasket(a);
+        call.enqueue(new Callback<List<ResponseProduct>>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
+            public void onResponse(Call<List<ResponseProduct>> call, Response<List<ResponseProduct>> response) {
                 if (response.isSuccessful()) {
                     getKeys = true;
-                    List<Products> product = response.body();
+                    List<ResponseProduct> product = response.body();
 
                     for (int i = 0; i < product.size(); i++) {
                         backList.add(product.get(i).getDownloads().get(0).getId());
@@ -159,7 +159,7 @@ public class FiveFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Products>> call, Throwable t) {
+            public void onFailure(Call<List<ResponseProduct>> call, Throwable t) {
                 Toast.makeText(getContext(), "oh shit  " + t, Toast.LENGTH_LONG).show();
             }
         });

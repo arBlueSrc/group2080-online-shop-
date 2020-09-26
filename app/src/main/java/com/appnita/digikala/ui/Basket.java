@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.appnita.digikala.adapter.BasketAdapter;
 import com.appnita.digikala.Lists;
 import com.appnita.digikala.databinding.ActivityBasketBinding;
-import com.appnita.digikala.retrofit.basket.Products;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
+import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
 import com.zarinpal.ewallets.purchase.OnCallbackRequestPaymentListener;
 import com.zarinpal.ewallets.purchase.OnCallbackVerificationPaymentListener;
@@ -75,13 +75,13 @@ public class Basket extends AppCompatActivity {
             }
         }
 
-        Call<List<Products>> call = apiService.getProductsBasket(a);
-        call.enqueue(new Callback<List<Products>>() {
+        Call<List<ResponseProduct>> call = apiService.getProductsBasket(a);
+        call.enqueue(new Callback<List<ResponseProduct>>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
+            public void onResponse(Call<List<ResponseProduct>> call, Response<List<ResponseProduct>> response) {
                 if (response.isSuccessful()) {
-                    List<Products> products = response.body();
+                    List<ResponseProduct> products = response.body();
 
                     BasketAdapter adapter = new BasketAdapter(Basket.this, products);
                     binding.rvBasket.setAdapter(adapter);
@@ -101,7 +101,7 @@ public class Basket extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Products>> call, Throwable t) {
+            public void onFailure(Call<List<ResponseProduct>> call, Throwable t) {
                 Toast.makeText(Basket.this, "oh  " + t, Toast.LENGTH_LONG).show();
             }
         });

@@ -1,5 +1,7 @@
 package com.appnita.digikala;
 
+import com.appnita.digikala.retrofit.basket.BasketClass;
+
 import java.util.ArrayList;
 import java.util.List;
 

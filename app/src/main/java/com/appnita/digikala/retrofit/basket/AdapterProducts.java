@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.R;
+import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.appnita.digikala.ui.ProductDetail;
 import com.squareup.picasso.Picasso;
 
@@ -20,12 +21,12 @@ import java.util.List;
 public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHolder> {
 
     Context context;
-    List<Products> list;
+    List<ResponseProduct> list;
 
     public AdapterProducts() {
     }
 
-    public AdapterProducts(Context context, List<Products> list) {
+    public AdapterProducts(Context context, List<ResponseProduct> list) {
         this.context = context;
         this.list = list;
     }
@@ -39,7 +40,7 @@ public class AdapterProducts extends RecyclerView.Adapter<AdapterProducts.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Products products = list.get(position);
+        ResponseProduct products = list.get(position);
 
         String imageUrl = products.getImages().get(0).getSrc();
         Picasso.with(context)

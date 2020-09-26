@@ -1,4 +1,4 @@
-package com.appnita.digikala;
+package com.appnita.digikala.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.appnita.digikala.databinding.ActivitySplashBinding;
-import com.appnita.digikala.ui.MainActivity;
-import com.squareup.picasso.Picasso;
 
 public class SplashActivity extends AppCompatActivity {
 

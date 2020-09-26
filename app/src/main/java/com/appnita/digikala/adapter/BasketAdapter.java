@@ -14,16 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.Lists;
 import com.appnita.digikala.R;
-import com.appnita.digikala.retrofit.basket.Products;
+import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 
 import java.util.List;
 
 public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder> {
 
     Context context;
-    List<Products> list;
+    List<ResponseProduct> list;
 
-    public BasketAdapter (Context context, List<Products> list) {
+    public BasketAdapter (Context context, List<ResponseProduct> list) {
         this.context = context;
         this.list = list;
     }
@@ -38,12 +38,12 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Products recyclerClass = list.get(position);
+        ResponseProduct recyclerClass = list.get(position);
         holder.title.setText(recyclerClass.getName());
         holder.price.setText(recyclerClass.getPrice());
 
         holder.delete.setOnLongClickListener(v -> {
-            Products recyclerClass2 = list.get(position);
+            ResponseProduct recyclerClass2 = list.get(position);
             list.remove(recyclerClass2);
             Lists.basketClass.remove(recyclerClass2);
             notifyDataSetChanged();
