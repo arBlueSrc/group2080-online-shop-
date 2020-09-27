@@ -36,13 +36,6 @@ public class ThreeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentThreeBinding.inflate(inflater);
 
-
-        AdapterProducts adapter = new AdapterProducts();
-        skeletonScreen = Skeleton.bind(binding.rvProducts)
-                .adapter(adapter)
-                .load(R.layout.item_skeleton)
-                .show();
-
         RetrofitConfig();
 
         // Inflate the layout for this fragment
@@ -63,7 +56,9 @@ public class ThreeFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<ResponseProductCategory> products = response.body();
 
-                    skeletonScreen.hide();
+                    binding.progress.setVisibility(View.GONE);
+                    binding.rvProducts.setVisibility(View.VISIBLE);
+
                     products.remove(0);
                     ParentAdapter productAdapter = new ParentAdapter(products,getContext());
                     binding.rvProducts.setAdapter(productAdapter);
