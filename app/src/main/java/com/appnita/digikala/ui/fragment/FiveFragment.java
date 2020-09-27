@@ -51,6 +51,7 @@ public class FiveFragment extends Fragment {
 
     FragmentFiveBinding binding;
     RecyclerViewSkeletonScreen skeletonScreen;
+
     int counter;
     final static List<String> backList = new ArrayList<>();
 
@@ -61,12 +62,6 @@ public class FiveFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentFiveBinding.inflate(inflater);
         // Inflate the layout for this fragment
-
-        MyFilesAdapter adapter = new MyFilesAdapter();
-        skeletonScreen = Skeleton.bind(binding.recyclerView)
-                .adapter(adapter)
-                .load(R.layout.item_skeleton)
-                .show();
 
         RetrofitConfig();
         return binding.getRoot();
@@ -124,34 +119,35 @@ public class FiveFragment extends Fragment {
                 if (response.isSuccessful()) {
                     getKeys = true;
                     List<ResponseProduct> product = response.body();
+                    List<BuyProductClassForRecycler> listCustomer;
 
                     for (int i = 0; i < product.size(); i++) {
                         backList.add(product.get(i).getDownloads().get(0).getId());
                     }
 
-                    counter = 0;
-                    List<BuyProductClassForRecycler> listCustomer = new ArrayList<>();
-                    for (int i = 0; i < products.size(); i++) {
-                        for (int j = 0; j < products.get(i).getLineItems().size(); j++) {
-                            listCustomer.add(new BuyProductClassForRecycler(products.get(i).getOrderKey(),
-                                    products.get(i).getLineItems().get(j).getProductId(),
-                                    products.get(0).getBilling().getEmail(),
-                                    String.valueOf(backList.get(counter))));
-                            counter++;
+                    if(backList.size()!=0) {
+                        counter = 0;
+                        listCustomer = new ArrayList<>();
+                        for (int i = 0; i < products.size(); i++) {
+                            for (int j = 0; j < products.get(i).getLineItems().size(); j++) {
+                                listCustomer.add(new BuyProductClassForRecycler(products.get(i).getOrderKey(),
+                                        products.get(i).getLineItems().get(j).getProductId(),
+                                        products.get(0).getBilling().getEmail(),
+                                        String.valueOf(backList.get(counter))));
+                                counter++;
+                            }
                         }
-                    }
-                    skeletonScreen.hide();
-                    if (products.size() != 0) {
-                        binding.notice.setVisibility(View.GONE);
-                        MyFilesAdapter productAdapter = new MyFilesAdapter(getContext(), listCustomer);
-                        binding.recyclerView.setAdapter(productAdapter);
-                    } else {
-                        binding.recyclerView.setVisibility(View.GONE);
-                        binding.notice.setVisibility(View.VISIBLE);
+                        if (products.size() != 0) {
+                            binding.notice.setVisibility(View.GONE);
+                            MyFilesAdapter productAdapter = new MyFilesAdapter(getContext(), listCustomer);
+                            binding.recyclerView.setAdapter(productAdapter);
+                        } else {
+                            binding.recyclerView.setVisibility(View.GONE);
+                            binding.notice.setVisibility(View.VISIBLE);
+                        }
                     }
 
                     Log.d("test list2 : ", backList.toString());
-
 
                 } else {
                     Toast.makeText(getContext(), "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
@@ -164,10 +160,6 @@ public class FiveFragment extends Fragment {
             }
         });
     }
-
-
-
-
 
     private void downloadZipFile() {
 

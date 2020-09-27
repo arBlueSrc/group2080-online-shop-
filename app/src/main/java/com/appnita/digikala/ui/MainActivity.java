@@ -66,9 +66,6 @@ public class MainActivity extends AppCompatActivity {
         //bottom navigation
         SetupBottomNavigation();
 
-        //toolbar
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         //shared preference
         SharedPreferencesSetting();
 

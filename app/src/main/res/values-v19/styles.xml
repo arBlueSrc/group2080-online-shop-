@@ -1,5 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -8,13 +9,4 @@
         <item name="fontFamily">@font/font2</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
-
-    <style name="TextAppearance.Widget.AppCompat.Toolbar.Subtitle." parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle." tools:ignore="ResourceCycle">
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="progressbar">
-        <item name="colorAccent">@android:color/white</item>
-    </style>
-
 </resources>
