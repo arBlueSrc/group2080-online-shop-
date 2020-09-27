@@ -13,8 +13,10 @@ import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentThreeBinding;
 import com.appnita.digikala.retrofit.basket.AdapterProducts;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
+import com.appnita.digikala.retrofit.pojoProductCategory.ResponseProductCategory;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.appnita.digikala.retrofit.shop.ParentAdapter;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 
@@ -54,15 +56,16 @@ public class ThreeFragment extends Fragment {
         retrofit = new RetrofitBasket();
         apiService = retrofit.getApiService();
 
-        Call<List<ResponseProduct>> call = apiService.getProducts();
-        call.enqueue(new Callback<List<ResponseProduct>>() {
+        Call<List<ResponseProductCategory>> call = apiService.getProductsCategory(0);
+        call.enqueue(new Callback<List<ResponseProductCategory>>() {
             @Override
-            public void onResponse(Call<List<ResponseProduct>> call, Response<List<ResponseProduct>> response) {
+            public void onResponse(Call<List<ResponseProductCategory>> call, Response<List<ResponseProductCategory>> response) {
                 if (response.isSuccessful()) {
-                    List<ResponseProduct> products = response.body();
+                    List<ResponseProductCategory> products = response.body();
 
                     skeletonScreen.hide();
-                    AdapterProducts productAdapter = new AdapterProducts(getContext(), products);
+                    products.remove(0);
+                    ParentAdapter productAdapter = new ParentAdapter(products,getContext());
                     binding.rvProducts.setAdapter(productAdapter);
 
                 } else {
@@ -71,7 +74,7 @@ public class ThreeFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<ResponseProduct>> call, Throwable t) {
+            public void onFailure(Call<List<ResponseProductCategory>> call, Throwable t) {
                 Toast.makeText(getContext(), "oh  " + t, Toast.LENGTH_LONG).show();
             }
         });
