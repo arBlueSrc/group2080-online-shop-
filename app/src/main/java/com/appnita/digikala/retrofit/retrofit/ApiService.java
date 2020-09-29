@@ -1,6 +1,7 @@
 package com.appnita.digikala.retrofit.retrofit;
 
 import com.appnita.digikala.retrofit.basket.BuyProduct;
+import com.appnita.digikala.retrofit.pojoPosts.ResponsePosts;
 import com.appnita.digikala.retrofit.pojoProductCategory.ResponseProductCategory;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 
@@ -49,6 +50,9 @@ public interface ApiService {
 
     @GET("products")
     Call<List<ResponseProduct>> getProductsByCategory(@Query("category") int id);
+
+    @GET("get_category_posts")
+    Call<ResponsePosts> getPostsCategory(@Query("id") int id);
 
     @GET("products/categories")
     Call<List<ResponseProductCategory>> getProductsCategory(@Query("parent") int parent);
