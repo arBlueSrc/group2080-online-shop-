@@ -1,6 +1,7 @@
 package com.appnita.digikala.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.appnita.digikala.retrofit.basket.BuyProduct;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.appnita.digikala.ui.LoginActivity;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 import com.ethanhua.skeleton.Skeleton;
 
@@ -62,6 +64,11 @@ public class FiveFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentFiveBinding.inflate(inflater);
         // Inflate the layout for this fragment
+
+        //userlogin
+        binding.btnUserSetting.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), LoginActivity.class));
+        });
 
         RetrofitConfig();
         return binding.getRoot();

@@ -2,7 +2,9 @@ package com.appnita.digikala.retrofit.pojoProducts;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ImagesItem{
+import java.io.Serializable;
+
+public class ImagesItem implements Serializable {
 
 	@SerializedName("date_modified_gmt")
 	private String dateModifiedGmt;

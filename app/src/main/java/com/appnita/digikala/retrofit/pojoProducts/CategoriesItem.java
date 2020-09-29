@@ -2,7 +2,9 @@ package com.appnita.digikala.retrofit.pojoProducts;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CategoriesItem{
+import java.io.Serializable;
+
+public class CategoriesItem implements Serializable {
 
 	@SerializedName("name")
 	private String name;

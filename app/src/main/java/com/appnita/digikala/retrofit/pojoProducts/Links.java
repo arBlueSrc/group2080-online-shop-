@@ -1,9 +1,10 @@
 package com.appnita.digikala.retrofit.pojoProducts;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class Links{
+public class Links implements Serializable {
 
 	@SerializedName("self")
 	private List<SelfItem> self;

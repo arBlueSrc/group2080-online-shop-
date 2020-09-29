@@ -2,7 +2,9 @@ package com.appnita.digikala.retrofit.pojoProducts;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Dimensions{
+import java.io.Serializable;
+
+public class Dimensions implements Serializable {
 
 	@SerializedName("length")
 	private String length;

@@ -2,7 +2,9 @@ package com.appnita.digikala.retrofit.pojoProducts;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CollectionItem{
+import java.io.Serializable;
+
+public class CollectionItem implements Serializable {
 
 	@SerializedName("href")
 	private String href;

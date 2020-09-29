@@ -1,6 +1,7 @@
 package com.appnita.digikala.retrofit.shop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.appnita.digikala.retrofit.basket.RetrofitBasket;
 import com.appnita.digikala.retrofit.pojoProductCategory.ResponseProductCategory;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.appnita.digikala.ui.ProductDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +72,8 @@ public class ParentAdapter extends RecyclerView.Adapter<ParentAdapter.ParentView
                 Toast.makeText(context, "oh  " + t, Toast.LENGTH_LONG).show();
             }
         });
+
+
     }
 
     @Override

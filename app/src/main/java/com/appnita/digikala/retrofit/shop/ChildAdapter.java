@@ -1,6 +1,7 @@
 package com.appnita.digikala.retrofit.shop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnita.digikala.R;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
+import com.appnita.digikala.ui.ProductDetail;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,6 +43,12 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ChildViewHol
         Picasso.with(context)
                 .load(product.getImages().get(0).getSrc())
                 .into(holder.image);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ProductDetail.class);
+            intent.putExtra("product",product);
+            context.startActivity(intent);
+        });
     }
 
     @Override

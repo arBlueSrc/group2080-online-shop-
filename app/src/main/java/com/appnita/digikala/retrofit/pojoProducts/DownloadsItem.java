@@ -2,7 +2,9 @@ package com.appnita.digikala.retrofit.pojoProducts;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DownloadsItem{
+import java.io.Serializable;
+
+public class DownloadsItem implements Serializable {
 
 	@SerializedName("file")
 	private String file;
