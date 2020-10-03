@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.appnita.digikala.databinding.ActivityMainMajorBinding;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
 import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
 import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -61,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarmain);
         setSupportActionBar(toolbar);
-
 
         //bottom navigation
         SetupBottomNavigation();

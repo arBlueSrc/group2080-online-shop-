@@ -20,10 +20,12 @@ public class AdapterStory extends RecyclerView.Adapter<AdapterStory.StoryViewHol
 
     List<PostsItem> list;
     Context context;
+    OnClickListener onClickListener;
 
-    public AdapterStory(List<PostsItem> list, Context context) {
+    public AdapterStory(List<PostsItem> list, Context context,OnClickListener onClickListener) {
         this.list = list;
         this.context = context;
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -46,6 +48,7 @@ public class AdapterStory extends RecyclerView.Adapter<AdapterStory.StoryViewHol
             holder.image.setImageResource(R.drawable.error);
         }
 
+        holder.itemView.setOnClickListener(v -> onClickListener.onClickItem(postsItem));
     }
 
     @Override
@@ -61,5 +64,9 @@ public class AdapterStory extends RecyclerView.Adapter<AdapterStory.StoryViewHol
             image = itemView.findViewById(R.id.img_story);
             title = itemView.findViewById(R.id.txt_story);
         }
+    }
+
+    public interface OnClickListener {
+        public void onClickItem(PostsItem postsItem);
     }
 }

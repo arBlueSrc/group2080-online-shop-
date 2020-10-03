@@ -1,9 +1,10 @@
 package com.appnita.digikala.retrofit.pojoPosts;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class PostsItem{
+public class PostsItem implements Serializable {
 
 	@SerializedName("date")
 	private String date;
