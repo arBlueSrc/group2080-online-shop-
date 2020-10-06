@@ -31,11 +31,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView11"
+        app:layout_constraintTop_toBottomOf="@+id/img_box"
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView11"
+        android:id="@+id/img_box"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/ic_empty"

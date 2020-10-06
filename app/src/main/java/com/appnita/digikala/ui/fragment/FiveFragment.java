@@ -1,7 +1,9 @@
 package com.appnita.digikala.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,15 +22,15 @@ import android.widget.Toast;
 
 import com.appnita.digikala.BuyProductClassForRecycler;
 import com.appnita.digikala.adapter.MyFilesAdapter;
-import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentFiveBinding;
-import com.appnita.digikala.retrofit.basket.BuyProduct;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.appnita.digikala.test.BuyProduct;
 import com.appnita.digikala.ui.LoginActivity;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
-import com.ethanhua.skeleton.Skeleton;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -57,10 +59,12 @@ public class FiveFragment extends Fragment {
     int counter;
     final static List<String> backList = new ArrayList<>();
 
+    SharedPreferences sharedpreferences;
+
     boolean getKeys = false;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFiveBinding.inflate(inflater);
         // Inflate the layout for this fragment
@@ -81,34 +85,41 @@ public class FiveFragment extends Fragment {
         retrofit = new RetrofitBasket();
         apiService = retrofit.getApiService();
 
-        Call<List<BuyProduct>> call = apiService.getCustomerProduct(472);
-        call.enqueue(new Callback<List<BuyProduct>>() {
-            @Override
-            public void onResponse(Call<List<BuyProduct>> call, Response<List<BuyProduct>> response) {
-                if (response.isSuccessful()) {
-                    List<BuyProduct> products = response.body();
+        sharedpreferences = getContext().getSharedPreferences("userNameShared", Context.MODE_PRIVATE);
+        String id = sharedpreferences.getString("id","");
 
-                    List<Integer> proID = new ArrayList<>();
-                    for (int i = 0; i < products.size(); i++) {
-                        for (int j = 0; j < products.get(i).getLineItems().size(); j++) {
-                            proID.add(Integer.valueOf(products.get(i).getLineItems().get(j).getProductId()));
+        if(!id.equals("")) {
+            binding.imgBox.setVisibility(View.GONE);
+            binding.notice.setVisibility(View.GONE);
+
+            Call<List<BuyProduct>> call = apiService.getCustomerProduct(Integer.parseInt(id));
+            call.enqueue(new Callback<List<BuyProduct>>() {
+                @Override
+                public void onResponse(Call<List<BuyProduct>> call, Response<List<BuyProduct>> response) {
+                    if (response.isSuccessful()) {
+                        List<BuyProduct> products = response.body();
+
+                        List<Integer> proID = new ArrayList<>();
+                        for (int i = 0; i < products.size(); i++) {
+                            for (int j = 0; j < products.get(i).getLineItems().size(); j++) {
+                                proID.add(products.get(i).getLineItems().get(j).getProductId());
+                            }
                         }
+
+                        getProductKey(proID, products);
+
+                    } else {
+                        Toast.makeText(getContext(), "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
                     }
-
-                    getProductKey(proID, products);
-
-                } else {
-                    skeletonScreen.hide();
-                    Toast.makeText(getContext(), "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<BuyProduct>> call, Throwable t) {
-                skeletonScreen.hide();
-                Toast.makeText(getContext(), "oh  " + t, Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<BuyProduct>> call, Throwable t) {
+                    skeletonScreen.hide();
+                    Toast.makeText(getContext(), "oh  " + t, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     private void getProductKey(List<Integer> a, List<BuyProduct> products) {
@@ -138,9 +149,11 @@ public class FiveFragment extends Fragment {
                         for (int i = 0; i < products.size(); i++) {
                             for (int j = 0; j < products.get(i).getLineItems().size(); j++) {
                                 listCustomer.add(new BuyProductClassForRecycler(products.get(i).getOrderKey(),
-                                        products.get(i).getLineItems().get(j).getProductId(),
+                                        String.valueOf(products.get(i).getLineItems().get(j).getProductId()),
+                                        product.get(j).getImages().get(0).getSrc(),
                                         products.get(0).getBilling().getEmail(),
-                                        String.valueOf(backList.get(counter))));
+                                        String.valueOf(backList.get(counter))
+                                        ,product.get(j).getName()));
                                 counter++;
                             }
                         }

@@ -1,18 +1,7 @@
 package com.appnita.digikala;
 
-import com.appnita.digikala.retrofit.basket.BuyProduct;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
-
 public class BuyProductClassForRecycler {
-    public BuyProductClassForRecycler(String orderKey, String productID, String email, String key) {
-        this.orderKey = orderKey;
-        this.ProductID = productID;
-        this.email = email;
-        this.key = key;
-    }
+
 
     public String getOrderKey() {
         return orderKey;
@@ -26,6 +15,35 @@ public class BuyProductClassForRecycler {
     private String orderKey;
 
     private String ProductID;
+
+    private String image;
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public BuyProductClassForRecycler(String orderKey, String productID, String image, String email, String key, String name) {
+        this.orderKey = orderKey;
+        ProductID = productID;
+        this.image = image;
+        this.email = email;
+        this.key = key;
+        this.name = name;
+    }
 
     public String getProductID() {
         return ProductID;

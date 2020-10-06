@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.appnita.digikala.Lists;
 import com.appnita.digikala.R;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.squareup.picasso.Picasso;
@@ -71,10 +70,10 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.title_text);
+            title = itemView.findViewById(R.id.title_my_file);
             delete = itemView.findViewById(R.id.btn_delete);
             price = itemView.findViewById(R.id.rv_price);
-            productimage = itemView.findViewById(R.id.img_basket);
+            productimage = itemView.findViewById(R.id.img_my_file);
 
 
         }

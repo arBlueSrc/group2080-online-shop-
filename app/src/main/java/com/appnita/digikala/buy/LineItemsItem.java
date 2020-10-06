@@ -21,9 +21,9 @@ public class LineItemsItem{
 
 	@Override
  	public String toString(){
-		return 
-			"LineItemsItem{" + 
-			"product_id = '" + productId + '\'' + 
+		return
+			"LineItemsItem{" +
+			"product_id = '" + productId + '\'' +
 			"}";
 		}
 }
