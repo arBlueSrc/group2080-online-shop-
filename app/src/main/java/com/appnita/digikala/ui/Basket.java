@@ -32,6 +32,7 @@ import com.zarinpal.ewallets.purchase.OnCallbackVerificationPaymentListener;
 import com.zarinpal.ewallets.purchase.PaymentRequest;
 import com.zarinpal.ewallets.purchase.ZarinPal;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -45,8 +46,7 @@ public class Basket extends AppCompatActivity {
 
     ActivityBasketBinding binding;
     private static final String TAG = "Basket";
-    private static int totalPrice = 0;
-    String refId = "";
+    private static long totalPrice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +54,11 @@ public class Basket extends AppCompatActivity {
         binding = ActivityBasketBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        refId = "";
-
-        RetrofitConfigBuy("222222222222222");
-
         //ui visibility
         uiVisibility();
 
         //zarinpal payment
         zarinpal();
-
 
     }
 
@@ -91,23 +86,18 @@ public class Basket extends AppCompatActivity {
 
     private void zarinpal() {
         Uri data = getIntent().getData();
-        ZarinPal.getPurchase(this).verificationPayment(data, new OnCallbackVerificationPaymentListener() {
-            @Override
-            public void onCallbackResultVerificationPayment(boolean isPaymentSuccess, String refID, PaymentRequest paymentRequest) {
-                if(isPaymentSuccess){
-                    Toast.makeText(Basket.this, "پرداخت موفقیت آمیز بود.", Toast.LENGTH_SHORT).show();
-                    RetrofitConfigBuy(refID);
-                }else {
-                    Toast.makeText(Basket.this, "پرداخت با خطا مواجه شد!", Toast.LENGTH_SHORT).show();
-                }
+        ZarinPal.getPurchase(this).verificationPayment(data, (isPaymentSuccess, refID, paymentRequest) -> {
+            if(isPaymentSuccess){
+                Toast.makeText(Basket.this, "پرداخت موفقیت آمیز بود.", Toast.LENGTH_SHORT).show();
+                RetrofitConfigBuy(refID);
+                Lists.basketClass.clear();
+            }else {
+                Toast.makeText(Basket.this, "پرداخت با خطا مواجه شد!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        binding.goToPay.setOnClickListener(v -> {
-            myPayment( 500L);
-        });
+        binding.goToPay.setOnClickListener(v -> myPayment( totalPrice));
     }
-
 
     @Override
     public void onBackPressed() {
@@ -123,14 +113,11 @@ public class Basket extends AppCompatActivity {
         payment.setDescription("خرید توسط اپلیکیشن ۲۰۸۰");
 
         payment.setCallbackURL("return://app");
-        purchase.startPayment(payment, new OnCallbackRequestPaymentListener() {
-            @Override
-            public void onCallbackResultPaymentRequest(int status, String authority, Uri paymentGatewayUri, Intent intent) {
-                if (status == 100){
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(Basket.this, "خطا در پرداخت", Toast.LENGTH_SHORT).show();
-                }
+        purchase.startPayment(payment, (status, authority, paymentGatewayUri, intent) -> {
+            if (status == 100){
+                startActivity(intent);
+            }else{
+                Toast.makeText(Basket.this, "خطا در پرداخت", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -149,24 +136,23 @@ public class Basket extends AppCompatActivity {
         call.enqueue(new Callback<List<ResponseProduct>>() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void onResponse(Call<List<ResponseProduct>> call, Response<List<ResponseProduct>> response) {
+            public void onResponse(@NotNull Call<List<ResponseProduct>> call, @NotNull Response<List<ResponseProduct>> response) {
                 if (response.isSuccessful()) {
                     List<ResponseProduct> products = response.body();
 
                     Log.i(TAG, "onResponse: retrofit " + response.toString());
 
-                    BasketAdapter adapter = new BasketAdapter(Basket.this, products, new BasketAdapter.onCLickBasket() {
-                        @Override
-                        public void onCLickDelete(ResponseProduct responseProduct) {
-                            Lists.basketClass.remove(Integer.valueOf(responseProduct.getId()));
-                            uiVisibility();
-                        }
+                    BasketAdapter adapter = new BasketAdapter(Basket.this, products, responseProduct -> {
+                        Lists.basketClass.remove(Integer.valueOf(responseProduct.getId()));
+                        uiVisibility();
                     });
                     binding.rvBasket.setAdapter(adapter);
                     binding.progressBar3.setVisibility(View.GONE);
 
-                    for (int i = 0; i < products.size(); i++) {
-                        totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
+                    if (products != null) {
+                        for (int i = 0; i < products.size(); i++) {
+                            totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
+                        }
                     }
 
                     String tPrice = String.valueOf(totalPrice);
@@ -179,14 +165,13 @@ public class Basket extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<ResponseProduct>> call, Throwable t) {
+            public void onFailure(@NotNull Call<List<ResponseProduct>> call, @NotNull Throwable t) {
                 Toast.makeText(Basket.this, "oh  " + t, Toast.LENGTH_LONG).show();
             }
         });
 
 
     }
-
 
     private void RetrofitConfigBuy(String refId) {
         RetrofitBasket retrofit;
@@ -201,12 +186,16 @@ public class Basket extends AppCompatActivity {
         String id = sharedpreferences.getString("id","");
 
         RequestBuy requestBuy = new RequestBuy();
-        requestBuy.setCustomerId(Integer.parseInt(id));
+        if (id != null) {
+            requestBuy.setCustomerId(Integer.parseInt(id));
+        }
         requestBuy.setBilling(new Billing(mobile,"",username,"group2080@gmail.com"));
         requestBuy.setStatus("processing");
 
              List<LineItemsItem> lineitem = new ArrayList<>();
-             lineitem.add(new LineItemsItem(4327));
+             for(int i = 0 ; i < Lists.basketClass.size() ; i++){
+                 lineitem.add(new LineItemsItem(Lists.basketClass.get(i)));
+             }
 
         requestBuy.setLineItems(lineitem);
         requestBuy.setPaymentMethod("WC_ZPal");
@@ -229,12 +218,12 @@ public class Basket extends AppCompatActivity {
         Call<RequestBuy> call = apiService.buyRequest(jsonObject1);
         call.enqueue(new Callback<RequestBuy>() {
             @Override
-            public void onResponse(Call<RequestBuy> call, Response<RequestBuy> response) {
+            public void onResponse(@NotNull Call<RequestBuy> call, @NotNull Response<RequestBuy> response) {
 
             }
 
             @Override
-            public void onFailure(Call<RequestBuy> call, Throwable t) {
+            public void onFailure(@NotNull Call<RequestBuy> call, @NotNull Throwable t) {
 
             }
         });
