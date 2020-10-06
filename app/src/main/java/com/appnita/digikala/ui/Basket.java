@@ -12,14 +12,23 @@ import android.widget.Toast;
 
 import com.appnita.digikala.adapter.BasketAdapter;
 import com.appnita.digikala.Lists;
+import com.appnita.digikala.buy.Billing;
+import com.appnita.digikala.buy.LineItemsItem;
+import com.appnita.digikala.buy.RequestBuy;
 import com.appnita.digikala.databinding.ActivityBasketBinding;
 import com.appnita.digikala.retrofit.basket.RetrofitBasket;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
 import com.appnita.digikala.retrofit.retrofit.ApiService;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.zarinpal.ewallets.purchase.OnCallbackRequestPaymentListener;
 import com.zarinpal.ewallets.purchase.OnCallbackVerificationPaymentListener;
 import com.zarinpal.ewallets.purchase.PaymentRequest;
 import com.zarinpal.ewallets.purchase.ZarinPal;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +42,15 @@ public class Basket extends AppCompatActivity {
     ActivityBasketBinding binding;
     private static final String TAG = "Basket";
 
-    private static int TOTAL_PRICE = 0;
+    private static int totalPrice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityBasketBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        RetrofitConfigBuy();
 
         //ui visibility
         uiVisibility();
@@ -66,7 +77,7 @@ public class Basket extends AppCompatActivity {
             binding.imgNull.setVisibility(View.GONE);
             binding.txtNull.setVisibility(View.GONE);
 
-            TOTAL_PRICE = 0;
+            totalPrice = 0;
             RetrofitConfig();
         }
 
@@ -121,10 +132,10 @@ public class Basket extends AppCompatActivity {
                         binding.progressBar3.setVisibility(View.GONE);
 
                         for (int i = 0; i < products.size(); i++) {
-                            TOTAL_PRICE = TOTAL_PRICE + Integer.parseInt(products.get(i).getPrice());
+                            totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
                         }
 
-                        String tPrice = String.valueOf(TOTAL_PRICE);
+                        String tPrice = String.valueOf(totalPrice);
 
                         binding.totalPrice.setText(tPrice + "تومان");
 
@@ -167,4 +178,49 @@ public class Basket extends AppCompatActivity {
             }
         });
     }
+
+    private void RetrofitConfigBuy() {
+        RetrofitBasket retrofit;
+        ApiService apiService;
+
+        retrofit = new RetrofitBasket();
+        apiService = retrofit.getApiService();
+
+        RequestBuy requestBuy = new RequestBuy();
+        requestBuy.setCustomerId(472);
+        requestBuy.setBilling(new Billing("09226762312","میرزایی","آرش","arashmirzaie.1997@gmail.com"));
+        requestBuy.setStatus("processing");
+
+             List<LineItemsItem> lineitem = new ArrayList<>();
+             lineitem.add(new LineItemsItem(4327));
+
+        requestBuy.setLineItems(lineitem);
+        requestBuy.setPaymentMethod("WC_ZPal");
+        requestBuy.setPaymentMethodTitle("پرداخت از اپلیکیشن");
+        requestBuy.setCustomerIpAddress("1.2.3.4");
+        requestBuy.setTransactionId("123456");
+
+
+        Gson g = new Gson();
+        String json = g.toJson(requestBuy);
+        JsonParser parser = new JsonParser();
+        JsonObject jsonObject1 = (JsonObject) parser.parse(json);
+
+        Log.i(TAG, "RetrofitConfigBuy: " + jsonObject1.toString());
+
+        Call<RequestBuy> call = apiService.buyRequest(jsonObject1);
+        call.enqueue(new Callback<RequestBuy>() {
+            @Override
+            public void onResponse(Call<RequestBuy> call, Response<RequestBuy> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<RequestBuy> call, Throwable t) {
+
+            }
+        });
+
+    }
+
 }

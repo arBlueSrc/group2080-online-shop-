@@ -1,17 +1,21 @@
 package com.appnita.digikala.retrofit.retrofit;
 
+import com.appnita.digikala.buy.RequestBuy;
 import com.appnita.digikala.retrofit.basket.BuyProduct;
 import com.appnita.digikala.retrofit.pojoPosts.ResponsePosts;
 import com.appnita.digikala.retrofit.pojoProductCategory.ResponseProductCategory;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import okhttp3.internal.concurrent.Task;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
@@ -69,5 +73,9 @@ public interface ApiService {
                                          @Query("download_file") int downloadFile,
                                          @Query("order") String order,
                                          @Query("key") String key);
+
+    @Headers("Content-Type: application/json")
+    @POST("orders")
+    Call<RequestBuy> buyRequest(@Body JsonObject RequestBuy);
 
 }
