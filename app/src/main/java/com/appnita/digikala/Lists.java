@@ -6,5 +6,5 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lists {
-    public static List<BasketClass> basketClass = new ArrayList<>();
+    public static List<Integer> basketClass = new ArrayList<>();
 }

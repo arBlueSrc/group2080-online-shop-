@@ -2,9 +2,11 @@ package com.appnita.digikala.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -83,24 +85,36 @@ public class PlayFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mediaPlayer = new MediaPlayer();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mediaPlayer.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+            );
+        }
         postsItem = (PostsItem) getArguments().getSerializable(
                 DESCRIBABLE_KEY);
         binding.txtTitle.setText(postsItem.getTitle());
+        binding.txtTitle.setText(postsItem.getContent().substring(53,postsItem.getContent().indexOf("mp3")+3));
         Picasso.with(getContext())
                 .load(postsItem.getThumbnail())
                 .into(binding.imgBtmsheet);
         try {
-
-//            mediaPlayer.setDataSource(getContext(), Uri.parse(postsItem.getContent().substring(53,postsItem.getContent().indexOf("mp3")+3)));
-            mediaPlayer.setDataSource(getContext(), Uri.parse("https://dl.nex1music.ir/1399/07/09/Arash%20Rabiei%20-%20Aroomam%20Ba%20To%20[128].mp3?time=1601481409&filename=/1399/07/09/Arash%20Rabiei%20-%20Aroomam%20Ba%20To%20[128].mp3"));
-
+          mediaPlayer.setDataSource(postsItem.getContent().substring(53,postsItem.getContent().indexOf("mp3")+3));
+//            mediaPlayer.setDataSource("https://dl.nex1music.ir/1399/07/09/Arash%20Rabiei%20-%20Aroomam%20Ba%20To%20[128].mp3?time=1601481409&filename=/1399/07/09/Arash%20Rabiei%20-%20Aroomam%20Ba%20To%20[128].mp3");
 
         } catch (IOException e) {
             Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
-        mediaPlayer.prepareAsync();
-        binding.seekBar.setMax(mediaPlayer.getDuration());
+        try {
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+
+        binding.seekBar.setMax(mediaPlayer.getDuration());
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {

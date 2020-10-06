@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.appnita.digikala.Lists;
 import com.appnita.digikala.R;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -22,12 +23,13 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
     Context context;
     List<ResponseProduct> list;
+    onCLickBasket onCLickBasket;
 
-    public BasketAdapter (Context context, List<ResponseProduct> list) {
+    public BasketAdapter(Context context, List<ResponseProduct> list, BasketAdapter.onCLickBasket onCLickBasket) {
         this.context = context;
         this.list = list;
+        this.onCLickBasket = onCLickBasket;
     }
-
 
     @NonNull
     @Override
@@ -42,10 +44,13 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
         holder.title.setText(recyclerClass.getName());
         holder.price.setText(recyclerClass.getPrice());
 
+        Picasso.with(context)
+                .load(recyclerClass.getImages().get(0).getSrc())
+                .into(holder.productimage);
+
         holder.delete.setOnLongClickListener(v -> {
-            ResponseProduct recyclerClass2 = list.get(position);
-            list.remove(recyclerClass2);
-            Lists.basketClass.remove(recyclerClass2);
+            onCLickBasket.onCLickDelete(recyclerClass);
+            list.remove(recyclerClass);
             notifyDataSetChanged();
             return true;
         });
@@ -62,16 +67,21 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView title,price;
-        ImageView delete;
+        ImageView delete,productimage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title_text);
             delete = itemView.findViewById(R.id.btn_delete);
             price = itemView.findViewById(R.id.rv_price);
-
+            productimage = itemView.findViewById(R.id.img_basket);
 
 
         }
+    }
+
+    public interface onCLickBasket {
+        public void onCLickDelete(ResponseProduct responseProduct);
+
     }
 }

@@ -99,8 +99,17 @@ public class ProductDetail extends AppCompatActivity {
         int id = intent.getIntExtra("id",0);
 
         binding.btnAddBasket.setOnClickListener(v -> {
-            Lists.basketClass.add(new BasketClass(id));
-            Toast.makeText(this, "به سبد شما افزوده شد", Toast.LENGTH_SHORT).show();
+            if(binding.btnAddBasket.getText().equals("اضافه کردن به سبد خرید")){
+                Lists.basketClass.add(product.getId());
+                binding.btnAddBasket.setText("ادامه پرداخت");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    binding.btnAddBasket.setBackgroundColor(getColor(R.color.green));
+                }
+                Toast.makeText(this, "به سبد شما افزوده شد.", Toast.LENGTH_SHORT).show();
+            }else{
+                startActivity(new Intent(ProductDetail.this,Basket.class));
+                finish();
+            }
         });
     }
 }

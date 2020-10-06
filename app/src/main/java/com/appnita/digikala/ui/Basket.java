@@ -6,6 +6,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.appnita.digikala.adapter.BasketAdapter;
@@ -29,8 +31,9 @@ import retrofit2.Response;
 public class Basket extends AppCompatActivity {
 
     ActivityBasketBinding binding;
+    private static final String TAG = "Basket";
 
-    int totalPrice;
+    private static int TOTAL_PRICE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,38 @@ public class Basket extends AppCompatActivity {
         binding = ActivityBasketBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        totalPrice = 0;
-        RetrofitConfig();
+        //ui visibility
+        uiVisibility();
 
         //zarinpal payment
+        zarinpal();
+
+
+    }
+
+    private void uiVisibility() {
+        if(Lists.basketClass.size()==0){
+            binding.rvBasket.setVisibility(View.GONE);
+            binding.linearLayout.setVisibility(View.GONE);
+
+            binding.imgNull.setVisibility(View.VISIBLE);
+            binding.txtNull.setVisibility(View.VISIBLE);
+
+        }else{
+            binding.rvBasket.setVisibility(View.VISIBLE);
+            binding.linearLayout.setVisibility(View.VISIBLE);
+            binding.progressBar3.setVisibility(View.VISIBLE);
+
+            binding.imgNull.setVisibility(View.GONE);
+            binding.txtNull.setVisibility(View.GONE);
+
+            TOTAL_PRICE = 0;
+            RetrofitConfig();
+        }
+
+    }
+
+    private void zarinpal() {
         Uri data = getIntent().getData();
         ZarinPal.getPurchase(this).verificationPayment(data, new OnCallbackVerificationPaymentListener() {
             @Override
@@ -66,45 +97,49 @@ public class Basket extends AppCompatActivity {
         retrofit = new RetrofitBasket();
         apiService = retrofit.getApiService();
 
-        List<Integer> a = new ArrayList<>();
 
+        Log.i(TAG, "RetrofitConfig: "+Lists.basketClass.toString());
 
-        for (int i = 0; i < Lists.basketClass.size(); i++) {
-            if (Lists.basketClass.size() > 0) {
-                a.add(Lists.basketClass.get(i).getId());
-            }
-        }
+            Call<List<ResponseProduct>> call = apiService.getProductsBasket(Lists.basketClass);
+            call.enqueue(new Callback<List<ResponseProduct>>() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onResponse(Call<List<ResponseProduct>> call, Response<List<ResponseProduct>> response) {
+                    if (response.isSuccessful()) {
+                        List<ResponseProduct> products = response.body();
 
-        Call<List<ResponseProduct>> call = apiService.getProductsBasket(a);
-        call.enqueue(new Callback<List<ResponseProduct>>() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onResponse(Call<List<ResponseProduct>> call, Response<List<ResponseProduct>> response) {
-                if (response.isSuccessful()) {
-                    List<ResponseProduct> products = response.body();
+                        Log.i(TAG, "onResponse: retrofit " + response.toString());
 
-                    BasketAdapter adapter = new BasketAdapter(Basket.this, products);
-                    binding.rvBasket.setAdapter(adapter);
+                        BasketAdapter adapter = new BasketAdapter(Basket.this, products, new BasketAdapter.onCLickBasket() {
+                            @Override
+                            public void onCLickDelete(ResponseProduct responseProduct) {
+                                Lists.basketClass.remove(Integer.valueOf(responseProduct.getId()));
+                                uiVisibility();
+                            }
+                        });
+                        binding.rvBasket.setAdapter(adapter);
+                        binding.progressBar3.setVisibility(View.GONE);
 
+                        for (int i = 0; i < products.size(); i++) {
+                            TOTAL_PRICE = TOTAL_PRICE + Integer.parseInt(products.get(i).getPrice());
+                        }
 
-                    for (int i = 0; i < products.size(); i++) {
-                        totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
+                        String tPrice = String.valueOf(TOTAL_PRICE);
+
+                        binding.totalPrice.setText(tPrice + "تومان");
+
+                    } else {
+                        Toast.makeText(Basket.this, "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
                     }
-
-                    String tPrice = String.valueOf(totalPrice);
-
-                    binding.totalPrice.setText(tPrice + "تومان");
-
-                } else {
-                    Toast.makeText(Basket.this, "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<ResponseProduct>> call, Throwable t) {
-                Toast.makeText(Basket.this, "oh  " + t, Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<List<ResponseProduct>> call, Throwable t) {
+                    Toast.makeText(Basket.this, "oh  " + t, Toast.LENGTH_LONG).show();
+                }
+            });
+
+
     }
 
     @Override

@@ -6,4 +6,5 @@
     <color name="toolbar">#EF1111</color>
     <color name="edt_color">#F8F8F8</color>
     <color name="skeleton">#F3F3F3</color>
+    <color name="green">#4CAF50</color>
 </resources>

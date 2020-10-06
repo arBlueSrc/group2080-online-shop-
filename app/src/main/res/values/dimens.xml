@@ -12,6 +12,7 @@
     <dimen name="button_redius">12dp</dimen>
     <dimen name="edt_redius">12dp</dimen>
     <dimen name="item_recycler_radius">12dp</dimen>
+    <dimen name="item_delete_radius">4dp</dimen>
 
     <!-- Overriding Default Bottom Navigation sizes-->
     <dimen name="design_bottom_navigation_text_size" tools:override="true">12sp</dimen>
