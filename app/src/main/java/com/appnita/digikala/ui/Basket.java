@@ -3,9 +3,13 @@ package com.appnita.digikala.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -41,8 +45,8 @@ public class Basket extends AppCompatActivity {
 
     ActivityBasketBinding binding;
     private static final String TAG = "Basket";
-
     private static int totalPrice = 0;
+    String refId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,9 @@ public class Basket extends AppCompatActivity {
         binding = ActivityBasketBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        RetrofitConfigBuy();
+        refId = "";
+
+        RetrofitConfigBuy("222222222222222");
 
         //ui visibility
         uiVisibility();
@@ -89,7 +95,8 @@ public class Basket extends AppCompatActivity {
             @Override
             public void onCallbackResultVerificationPayment(boolean isPaymentSuccess, String refID, PaymentRequest paymentRequest) {
                 if(isPaymentSuccess){
-                    Toast.makeText(Basket.this, "پرداخت موفقیت آمیز بود." + refID, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Basket.this, "پرداخت موفقیت آمیز بود.", Toast.LENGTH_SHORT).show();
+                    RetrofitConfigBuy(refID);
                 }else {
                     Toast.makeText(Basket.this, "پرداخت با خطا مواجه شد!", Toast.LENGTH_SHORT).show();
                 }
@@ -101,57 +108,6 @@ public class Basket extends AppCompatActivity {
         });
     }
 
-    private void RetrofitConfig() {
-        RetrofitBasket retrofit;
-        ApiService apiService;
-
-        retrofit = new RetrofitBasket();
-        apiService = retrofit.getApiService();
-
-
-        Log.i(TAG, "RetrofitConfig: "+Lists.basketClass.toString());
-
-            Call<List<ResponseProduct>> call = apiService.getProductsBasket(Lists.basketClass);
-            call.enqueue(new Callback<List<ResponseProduct>>() {
-                @SuppressLint("SetTextI18n")
-                @Override
-                public void onResponse(Call<List<ResponseProduct>> call, Response<List<ResponseProduct>> response) {
-                    if (response.isSuccessful()) {
-                        List<ResponseProduct> products = response.body();
-
-                        Log.i(TAG, "onResponse: retrofit " + response.toString());
-
-                        BasketAdapter adapter = new BasketAdapter(Basket.this, products, new BasketAdapter.onCLickBasket() {
-                            @Override
-                            public void onCLickDelete(ResponseProduct responseProduct) {
-                                Lists.basketClass.remove(Integer.valueOf(responseProduct.getId()));
-                                uiVisibility();
-                            }
-                        });
-                        binding.rvBasket.setAdapter(adapter);
-                        binding.progressBar3.setVisibility(View.GONE);
-
-                        for (int i = 0; i < products.size(); i++) {
-                            totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
-                        }
-
-                        String tPrice = String.valueOf(totalPrice);
-
-                        binding.totalPrice.setText(tPrice + "تومان");
-
-                    } else {
-                        Toast.makeText(Basket.this, "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<ResponseProduct>> call, Throwable t) {
-                    Toast.makeText(Basket.this, "oh  " + t, Toast.LENGTH_LONG).show();
-                }
-            });
-
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -179,16 +135,74 @@ public class Basket extends AppCompatActivity {
         });
     }
 
-    private void RetrofitConfigBuy() {
+    private void RetrofitConfig() {
         RetrofitBasket retrofit;
         ApiService apiService;
 
         retrofit = new RetrofitBasket();
         apiService = retrofit.getApiService();
 
+
+        Log.i(TAG, "RetrofitConfig: "+Lists.basketClass.toString());
+
+        Call<List<ResponseProduct>> call = apiService.getProductsBasket(Lists.basketClass);
+        call.enqueue(new Callback<List<ResponseProduct>>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<List<ResponseProduct>> call, Response<List<ResponseProduct>> response) {
+                if (response.isSuccessful()) {
+                    List<ResponseProduct> products = response.body();
+
+                    Log.i(TAG, "onResponse: retrofit " + response.toString());
+
+                    BasketAdapter adapter = new BasketAdapter(Basket.this, products, new BasketAdapter.onCLickBasket() {
+                        @Override
+                        public void onCLickDelete(ResponseProduct responseProduct) {
+                            Lists.basketClass.remove(Integer.valueOf(responseProduct.getId()));
+                            uiVisibility();
+                        }
+                    });
+                    binding.rvBasket.setAdapter(adapter);
+                    binding.progressBar3.setVisibility(View.GONE);
+
+                    for (int i = 0; i < products.size(); i++) {
+                        totalPrice = totalPrice + Integer.parseInt(products.get(i).getPrice());
+                    }
+
+                    String tPrice = String.valueOf(totalPrice);
+
+                    binding.totalPrice.setText(tPrice + "تومان");
+
+                } else {
+                    Toast.makeText(Basket.this, "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ResponseProduct>> call, Throwable t) {
+                Toast.makeText(Basket.this, "oh  " + t, Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+    }
+
+
+    private void RetrofitConfigBuy(String refId) {
+        RetrofitBasket retrofit;
+        ApiService apiService;
+
+        retrofit = new RetrofitBasket();
+        apiService = retrofit.getApiService();
+
+        SharedPreferences sharedpreferences = getSharedPreferences("userNameShared", Context.MODE_PRIVATE);
+        String username = sharedpreferences.getString("username","");
+        String mobile = sharedpreferences.getString("mobile","");
+        String id = sharedpreferences.getString("id","");
+
         RequestBuy requestBuy = new RequestBuy();
-        requestBuy.setCustomerId(472);
-        requestBuy.setBilling(new Billing("09226762312","میرزایی","آرش","arashmirzaie.1997@gmail.com"));
+        requestBuy.setCustomerId(Integer.parseInt(id));
+        requestBuy.setBilling(new Billing(mobile,"",username,"group2080@gmail.com"));
         requestBuy.setStatus("processing");
 
              List<LineItemsItem> lineitem = new ArrayList<>();
@@ -197,10 +211,14 @@ public class Basket extends AppCompatActivity {
         requestBuy.setLineItems(lineitem);
         requestBuy.setPaymentMethod("WC_ZPal");
         requestBuy.setPaymentMethodTitle("پرداخت از اپلیکیشن");
-        requestBuy.setCustomerIpAddress("1.2.3.4");
-        requestBuy.setTransactionId("123456");
 
+            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+            String ipAddress = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
 
+        requestBuy.setCustomerIpAddress(ipAddress);
+        requestBuy.setTransactionId(refId);
+
+        //send data for register a rezerve should be json object
         Gson g = new Gson();
         String json = g.toJson(requestBuy);
         JsonParser parser = new JsonParser();

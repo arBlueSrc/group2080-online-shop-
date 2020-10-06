@@ -5,6 +5,7 @@ import com.appnita.digikala.retrofit.basket.BuyProduct;
 import com.appnita.digikala.retrofit.pojoPosts.ResponsePosts;
 import com.appnita.digikala.retrofit.pojoProductCategory.ResponseProductCategory;
 import com.appnita.digikala.retrofit.pojoProducts.ResponseProduct;
+import com.appnita.digikala.retrofit.pojoid.ResponseId;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -42,6 +43,9 @@ public interface ApiService {
                                      @Query("mobileNo") String mobileNo,
                                      @Query("type") String type,
                                      @Query("otp") String username);
+
+    @GET("customers")
+    Call<List<ResponseId>> getid (@Query("search") String search);
 
     @POST("get_posts")
     Call<NewsRetrofit> news ();

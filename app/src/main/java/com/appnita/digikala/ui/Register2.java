@@ -114,12 +114,13 @@ public class Register2 extends AppCompatActivity {
             public void onResponse(Call<RegisterCondition> call, Response<RegisterCondition> response) {
                 if (response.isSuccessful()) {
                     RegisterCondition registerCondition = response.body();
-
                     if (registerCondition.getSuccess().equals("true")) {
                         progressDialog.cancel();
                         Toast.makeText(Register2.this, "ثبت نام با موفقیت انجام شد", Toast.LENGTH_SHORT).show();
                         SharedPreferences sharedPreferences = getSharedPreferences("userNameShared", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString("username",username).apply();
+                        sharedPreferences.edit().putString("mobile",phone).apply();
+                        sharedPreferences.edit().putString("id",response.body().getData().getUserId()).apply();
                         startActivity(new Intent(Register2.this, MainActivity.class));
                     } else {
                         progressDialog.cancel();

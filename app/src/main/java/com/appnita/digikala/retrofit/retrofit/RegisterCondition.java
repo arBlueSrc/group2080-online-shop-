@@ -35,6 +35,19 @@ public class RegisterCondition {
         @Expose
         private String msg;
 
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        @SerializedName("user_id")
+        @Expose
+        private String userId;
+
+
         public String getMsg() {
             return msg;
         }
