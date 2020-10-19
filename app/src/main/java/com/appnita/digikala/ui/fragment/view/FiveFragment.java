@@ -1,22 +1,15 @@
-package com.appnita.digikala.ui.fragment;
+package com.appnita.digikala.ui.fragment.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Environment;
 import android.os.PowerManager;
 import android.util.Log;
@@ -25,6 +18,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.appnita.digikala.BuyProductClassForRecycler;
 import com.appnita.digikala.adapter.MyFilesAdapter;
@@ -38,10 +35,8 @@ import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -65,7 +60,6 @@ public class FiveFragment extends Fragment {
 
     FragmentFiveBinding binding;
     RecyclerViewSkeletonScreen skeletonScreen;
-    MyFilesAdapter productAdapter;
 
     int counter;
     final static List<String> backList = new ArrayList<>();
@@ -99,27 +93,27 @@ public class FiveFragment extends Fragment {
 
         RetrofitConfig();
         return binding.getRoot();
-
-
     }
 
 
-    public void isReadStoragePermissionGranted() {
+    public  void isReadStoragePermissionGranted() {
         if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     1);
         }
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case 1:
+            case 1 :
                 Toast.makeText(getContext(), "permission is granted !", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -129,11 +123,9 @@ public class FiveFragment extends Fragment {
 
         private Context context;
         private PowerManager.WakeLock mWakeLock;
-        private String name;
 
-        public DownloadTask(Context context, String name) {
+        public DownloadTask(Context context) {
             this.context = context;
-            this.name = name;
         }
 
         @SuppressLint("SdCardPath")
@@ -160,7 +152,7 @@ public class FiveFragment extends Fragment {
 
                 // download the file
                 input = connection.getInputStream();
-                output = new FileOutputStream("/sdcard/2080/" + name);
+                output = new FileOutputStream("/sdcard/2080/arash.pdf");
 
                 byte data[] = new byte[4096];
                 long total = 0;
@@ -212,7 +204,6 @@ public class FiveFragment extends Fragment {
             // if we get here, length is known, now set indeterminate to false
             mProgressDialog.setIndeterminate(false);
             mProgressDialog.setMax(100);
-            Toast.makeText(context, "" + progress[0], Toast.LENGTH_SHORT).show();
             mProgressDialog.setProgress(progress[0]);
         }
 
@@ -221,14 +212,13 @@ public class FiveFragment extends Fragment {
             mWakeLock.release();
             mProgressDialog.dismiss();
             if (result != null)
-                Toast.makeText(context, "مشکل در هنگام دانلود : " + result, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
             else
-                Toast.makeText(context, "دانلود فایل با موفقیت انجام شد", Toast.LENGTH_SHORT).show();
-                productAdapter.notifyDataSetChanged();
+                Toast.makeText(context, "File downloaded", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void initialize(String url, String name) {
+    private void initialize(String url) {
 
 
         mProgressDialog = new ProgressDialog(getContext());
@@ -238,7 +228,7 @@ public class FiveFragment extends Fragment {
         mProgressDialog.setCancelable(true);
 
         // execute this when the downloader must be fired
-        final DownloadTask downloadTask = new DownloadTask(getContext(), name);
+        final DownloadTask downloadTask = new DownloadTask(getContext());
         downloadTask.execute(url);
 
         mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -252,6 +242,8 @@ public class FiveFragment extends Fragment {
         });
     }
 
+
+
     private void RetrofitConfig() {
         RetrofitBasket retrofit;
         ApiService apiService;
@@ -260,9 +252,9 @@ public class FiveFragment extends Fragment {
         apiService = retrofit.getApiService();
 
         sharedpreferences = getContext().getSharedPreferences("userNameShared", Context.MODE_PRIVATE);
-        String id = sharedpreferences.getString("id", "");
+        String id = sharedpreferences.getString("id","");
 
-        if (!id.equals("")) {
+        if(!id.equals("")) {
             binding.imgBox.setVisibility(View.GONE);
             binding.notice.setVisibility(View.GONE);
 
@@ -279,7 +271,9 @@ public class FiveFragment extends Fragment {
                                 proID.add(products.get(i).getLineItems().get(j).getProductId());
                             }
                         }
+
                         getProductKey(proID, products);
+
                     } else {
                         Toast.makeText(getContext(), "ok but ..." + response.message(), Toast.LENGTH_LONG).show();
                     }
@@ -287,7 +281,7 @@ public class FiveFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<List<BuyProduct>> call, Throwable t) {
-//                    skeletonScreen.hide();
+                    skeletonScreen.hide();
                     Toast.makeText(getContext(), "oh  " + t, Toast.LENGTH_LONG).show();
                 }
             });
@@ -309,31 +303,30 @@ public class FiveFragment extends Fragment {
                 if (response.isSuccessful()) {
                     getKeys = true;
                     List<ResponseProduct> product = response.body();
-                    Log.i(TAG, "onResponse: " + product.get(0).getId());
                     List<BuyProductClassForRecycler> listCustomer;
 
                     for (int i = 0; i < product.size(); i++) {
                         backList.add(product.get(i).getDownloads().get(0).getId());
                     }
 
-                    if (backList.size() != 0) {
+                    if(backList.size()!=0) {
                         counter = 0;
                         listCustomer = new ArrayList<>();
                         for (int i = 0; i < products.size(); i++) {
                             for (int j = 0; j < products.get(i).getLineItems().size(); j++) {
                                 listCustomer.add(new BuyProductClassForRecycler(products.get(i).getOrderKey(),
-                                        String.valueOf(product.get(counter).getId()),
-                                        product.get(counter).getImages().get(0).getSrc(),
-                                        products.get(i).getBilling().getEmail(),
+                                        String.valueOf(products.get(i).getLineItems().get(j).getProductId()),
+                                        product.get(j).getImages().get(0).getSrc(),
+                                        products.get(0).getBilling().getEmail(),
                                         String.valueOf(backList.get(counter)),
-                                        product.get(counter).getName(),
-                                        product.get(counter).getDownloads().get(0).getName()));
+                                        product.get(j).getName(),
+                                        product.get(j).getDownloads().get(0).getName()));
                                 counter++;
                             }
                         }
                         if (products.size() != 0) {
                             binding.notice.setVisibility(View.GONE);
-                             productAdapter = new MyFilesAdapter(getContext(), listCustomer, new MyFilesAdapter.onClickListener() {
+                            MyFilesAdapter productAdapter = new MyFilesAdapter(getContext(), listCustomer, new MyFilesAdapter.onClickListener() {
                                 @Override
                                 public void onDownload(BuyProductClassForRecycler file) {
                                     downloadZipFile(file);
@@ -341,14 +334,6 @@ public class FiveFragment extends Fragment {
 
                                 @Override
                                 public void onSeefile(BuyProductClassForRecycler file) {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                                    intent.setDataAndType(Uri.parse("/sdcard/2080/"+file.getFileName()),"application/pdf");
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    try {
-                                        startActivity(intent);
-                                    } catch (ActivityNotFoundException e) {
-                                        Toast.makeText(getContext(), "No Application available to view pdf", Toast.LENGTH_LONG).show();
-                                    }
 
                                 }
                             });
@@ -375,13 +360,13 @@ public class FiveFragment extends Fragment {
 
     private void downloadZipFile(BuyProductClassForRecycler file) {
 
-        String urlDownload = "https://www.group2080.ir/?download_file=" + file.getProductID()
-                + "&order=" + file.getOrderKey()
-                + "&email=" + file.getEmail()
-                + "&key=" + file.getKey();
-        Log.i(TAG, "downloadZipFile: "+urlDownload);
-        initialize(urlDownload, file.getFileName());
+       String urlDownload = "https://www.group2080.ir/?download_file="+file.getProductID()
+               +"&order="+file.getOrderKey()
+                +"&email="+file.getEmail()
+                +"&key="+file.getKey();
 
+       initialize(urlDownload);
     }
+
 
 }

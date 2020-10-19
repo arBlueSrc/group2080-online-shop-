@@ -20,6 +20,26 @@ public class BuyProductClassForRecycler {
 
     private String name;
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    private String fileName;
+
+    public BuyProductClassForRecycler(String orderKey, String productID, String image, String email, String key, String name, String fileName) {
+        this.orderKey = orderKey;
+        ProductID = productID;
+        this.image = image;
+        this.email = email;
+        this.key = key;
+        this.name = name;
+        this.fileName = fileName;
+    }
+
     public String getName() {
         return name;
     }
@@ -34,15 +54,6 @@ public class BuyProductClassForRecycler {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public BuyProductClassForRecycler(String orderKey, String productID, String image, String email, String key, String name) {
-        this.orderKey = orderKey;
-        ProductID = productID;
-        this.image = image;
-        this.email = email;
-        this.key = key;
-        this.name = name;
     }
 
     public String getProductID() {

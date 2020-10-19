@@ -16,6 +16,7 @@ import com.appnita.digikala.BuyProductClassForRecycler;
 import com.appnita.digikala.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +24,12 @@ public class MyFilesAdapter extends RecyclerView.Adapter<MyFilesAdapter.ViewHold
 
     Context context;
     List<BuyProductClassForRecycler> list = new ArrayList<>();
+    onClickListener onClickListener;
 
-    public MyFilesAdapter(Context context, List<BuyProductClassForRecycler> list) {
+    public MyFilesAdapter(Context context, List<BuyProductClassForRecycler> list, MyFilesAdapter.onClickListener onClickListener) {
         this.context = context;
         this.list = list;
+        this.onClickListener = onClickListener;
     }
 
     public MyFilesAdapter(){
@@ -44,11 +47,22 @@ public class MyFilesAdapter extends RecyclerView.Adapter<MyFilesAdapter.ViewHold
         BuyProductClassForRecycler file = list.get(position);
         holder.title.setText(file.getName());
 
+        File file2 = new File("/sdcard/2080/"+file.getFileName());
+        if (file2.exists()) {
+            holder.button.setVisibility(View.GONE);
+            holder.button2.setVisibility(View.VISIBLE);
+        }else{
+            holder.button.setVisibility(View.VISIBLE);
+            holder.button2.setVisibility(View.GONE);
+        }
+
+        holder.button.setOnClickListener(v -> onClickListener.onDownload(file));
+        holder.button2.setOnClickListener(v -> onClickListener.onSeefile(file));
+
         Picasso.with(context)
                 .load(file.getImage())
                 .into(holder.imageView);
 
-        holder.button.setOnClickListener(v -> Toast.makeText(context, "کلیک شد", Toast.LENGTH_SHORT).show());
 
     }
 
@@ -60,13 +74,19 @@ public class MyFilesAdapter extends RecyclerView.Adapter<MyFilesAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView title;
         ImageView imageView;
-        Button button;
+        Button button, button2;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title_my_file);
             button = itemView.findViewById(R.id.btn_download);
+            button2 = itemView.findViewById(R.id.btn_seefile);
             imageView = itemView.findViewById(R.id.img_my_file);
         }
+    }
+
+    public interface onClickListener {
+        public void onDownload (BuyProductClassForRecycler file);
+        public void onSeefile (BuyProductClassForRecycler file);
     }
 }

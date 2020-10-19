@@ -1,19 +1,10 @@
-package com.appnita.digikala.ui.fragment;
+package com.appnita.digikala.ui.fragment.view;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,23 +12,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.appnita.digikala.R;
 import com.appnita.digikala.databinding.FragmentHomeBinding;
-import com.appnita.digikala.extraApp.Darsad;
-import com.appnita.digikala.adapter.RecyclerAdapterClass;
-import com.appnita.digikala.adapter.RecyclerAdapterConsult;
-import com.appnita.digikala.adapter.RecyclerAdapterNews;
-import com.appnita.digikala.ui.RecyclerObjectClass;
-import com.appnita.digikala.retrofit.retrofit.ApiService;
-import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
-import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
 import com.appnita.digikala.retrofit.room.PostsDao;
-import com.appnita.digikala.retrofit.room.PostsDatabase;
-import com.appnita.digikala.ui.slider.SliderItem;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
-import com.ethanhua.skeleton.Skeleton;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -48,14 +31,7 @@ import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class HomeFragment extends Fragment {
