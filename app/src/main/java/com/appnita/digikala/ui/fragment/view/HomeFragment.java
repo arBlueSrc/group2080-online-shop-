@@ -1,15 +1,24 @@
 package com.appnita.digikala.ui.fragment.view;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.appnita.digikala.R;
+import com.appnita.digikala.StopwatchService;
 import com.appnita.digikala.databinding.FragmentHomeBinding;
 import com.appnita.digikala.retrofit.room.PostsDao;
 import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
@@ -31,22 +41,25 @@ import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class HomeFragment extends Fragment {
 
     FragmentHomeBinding binding;
-    private Handler handler;
-    RecyclerViewSkeletonScreen skeletonScreen1, skeletonScreen2, skeletonScreen3;
+    TextView textViewTimer = null;
+    Button buttonStart, buttonStop;
 
-    final static int OFF_SET = 700;
+    SharedPreferences sharedPreferences;
 
-
-    PostsDao postsDao;
+    float time;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
         return binding.getRoot();
@@ -54,20 +67,62 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Toast.makeText(getContext(), "hi new page", Toast.LENGTH_SHORT).show();
-        mpchart();
 
-        Animation anim1 = AnimationUtils.loadAnimation(getContext() , R.anim.chart_anim);
-        anim1.setDuration(700);
-        anim1.setStartOffset(OFF_SET);
-        binding.cardView3.setAnimation(anim1);
+        textViewTimer = view.findViewById(R.id.textViewTimer);
+        buttonStart = view.findViewById(R.id.buttonStart);
+        buttonStop = view.findViewById(R.id.buttonStop);
 
-        Animation anim2 = AnimationUtils.loadAnimation(getContext() , R.anim.chart_anim);
-        anim2.setDuration(1300);
-        anim2.setStartOffset(OFF_SET);
-        binding.cardView.setAnimation(anim2);
-        binding.cardView2.setAnimation(anim2);
+        sharedPreferences = getContext().getSharedPreferences("time",MODE_PRIVATE);
+
+        buttonStart.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), StopwatchService.class);
+            ContextCompat.startForegroundService(getContext(),intent);
+        });
+
+        buttonStop.setOnClickListener(v -> {
+            getContext().stopService(new Intent(getContext(), StopwatchService.class));
+            sharedPreferences.edit().putFloat("time" , time).apply();
+//                textViewTimer.setText("00:00:00.0");
+        });
     }
+
+    private final BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent);
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getContext().registerReceiver(br, new IntentFilter(StopwatchService.STOPWATCH_BR));
+    }
+
+    @Override
+    public void onStop() {
+        getContext().unregisterReceiver(br);
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+            String hours = intent.getStringExtra("hours");
+            String minutes = intent.getStringExtra("minutes");
+            String seconds = intent.getStringExtra("seconds");
+            String milliseconds = intent.getStringExtra("milliseconds");
+            time = intent.getFloatExtra("time",0);
+            textViewTimer.setText(hours + " : " + minutes + " : " + seconds + " . " + milliseconds);
+        }
+    }
+
+
 
     private void mpchart() {
         binding.chart.setBackgroundColor(Color.WHITE);
@@ -154,12 +209,7 @@ public class HomeFragment extends Fragment {
 
         // set the filled area
         set1.setDrawFilled(true);
-        set1.setFillFormatter(new IFillFormatter() {
-            @Override
-            public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
-                return binding.chart.getAxisLeft().getAxisMinimum();
-            }
-        });
+        set1.setFillFormatter((dataSet, dataProvider) -> binding.chart.getAxisLeft().getAxisMinimum());
 
         // set color of filled area
         if (Utils.getSDKInt() >= 18) {
@@ -179,144 +229,15 @@ public class HomeFragment extends Fragment {
         // set data
         binding.chart.setData(data);
 
-        Animation anim1 = AnimationUtils.loadAnimation(getContext() , R.anim.chart_anim);
+        Animation anim1 = AnimationUtils.loadAnimation(getContext(), R.anim.chart_anim);
         anim1.setDuration(1000);
-        anim1.setStartOffset(OFF_SET);
         binding.chart.startAnimation(anim1);
+
 //        binding.chart.
     }
 
-//    private void RetrofitConfiguration() {
-//        //server config
-//        RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
-//        ApiService apiService = retrofit.getApiService();
-//
-//
-//        Call<NewsRetrofit> call = apiService.news();
-//        call.enqueue(new Callback<NewsRetrofit>() {
-//            @Override
-//            public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
-//                if (response.isSuccessful()) {
-//                    assert response.body() != null;
-//                    List<NewsRetrofit.posts> list = response.body().getNews();
-//
-//
-//
-//                    if (postsDao.getAllPosts().size() == 0) {
-//                        for (int i = list.size() - 1; i >= 0; i--) {//
-//                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-//                            rvOBJ.setTitle(list.get(i).getTitle());
-//                            rvOBJ.setContent(list.get(i).getContent());
-//                            rvOBJ.setImage(list.get(i).getThumbnail());
-//                            rvOBJ.setUrl(list.get(i).getUrl());
-//                            rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
-//                            postsDao.insert(rvOBJ);
-//                        }
-//                    }
-//
-//                    Log.d("test1", "onResponse: "+list.get(list.size() - 1).getTitle());
-//                    Log.d("test2", "onResponse: "+postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle());
-//
-//                    if (!list.get(list.size() - 1).getTitle().equals
-//                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
-//
-//                        postsDao.deleteall();
-//                        for (int i = list.size() - 1; i >= 0; i--) {
-//                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-//                            rvOBJ.setTitle(list.get(i).getTitle());
-//                            rvOBJ.setContent(list.get(i).getContent());
-//                            rvOBJ.setImage(list.get(i).getThumbnail());
-//                            rvOBJ.setUrl(list.get(i).getUrl());
-//                            rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
-//                            Log.d("categorys", "onResponse: " + list.get(i).getCategories().get(0).getId());
-//                            postsDao.insert(rvOBJ);
-//                        }
-//                    }
-//
-//
-//                    skeletonScreen3.hide();
-//                    //slider
-//                    List<SliderItem> list2 = new ArrayList<>();
-//                    for (int i = 0; i < postsDao.getCategoraizedPosts(398).size(); i++) {
-//                        list2.add(new SliderItem(postsDao.getCategoraizedPosts(398).get(i).getTitle()
-//                                , postsDao.getCategoraizedPosts(398).get(i).getImage()));
-//                    }
-//                    slider(list2);
-//
-//                    RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
-//                    Log.d("categorys", "onResponse: "+postsDao.getCategoraizedPosts(398).size());
-//                    RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
-//                    RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<NewsRetrofit> call, Throwable t) {
-//                skeletonScreen3.hide();
-//                RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
-//                RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
-//                RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
-//            }
-//
-//        });
-//    }
-//
-//    private void RecyclerViewConfiqurationNews(List<RecyclerObjectClass> list) {
-//        RecyclerAdapterNews adapter = new RecyclerAdapterNews(getContext(), list);
-//        binding.rvNews.setAdapter(adapter);
-//
-//    }
-//
-//    private void RecyclerViewConfiqurationConsult(List<RecyclerObjectClass> list) {
-//        RecyclerAdapterConsult adapter = new RecyclerAdapterConsult(getContext(), list);
-//        binding.rvConsult.setAdapter(adapter);
-//    }
-//
-//    private void RecyclerViewConfiqurationClass(List<RecyclerObjectClass> list) {
-//        RecyclerAdapterClass adapter = new RecyclerAdapterClass(getContext(), list);
-//        binding.rvClass.setAdapter(adapter);
-//    }
-
-//    public void countDownStart() {
-//        handler = new Handler();
-//        // Please here set your event date//YYYY-MM-DD
-//        Runnable runnable = new Runnable() {
-//            @SuppressLint({"DefaultLocale", "SetTextI18n"})
-//            @Override
-//            public void run() {
-//                handler.postDelayed(this, 1000);
-//                try {
-//                    @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(
-//                            "yyyy-MM-dd");
-//                    // Please here set your event date//YYYY-MM-DD
-//                    Date futureDate;
-//                    futureDate = dateFormat.parse("2021-6-2");
-//                    Date currentDate = new Date();
-//                    if (!currentDate.after(futureDate)) {
-//                        assert futureDate != null;
-//                        long diff = (futureDate.getTime() + (8 * 60 * 60 * 1000))
-//                                - currentDate.getTime();
-//                        long days = diff / (24 * 60 * 60 * 1000);
-//                        diff -= days * (24 * 60 * 60 * 1000);
-//                        long hours = diff / (60 * 60 * 1000);
-//                        diff -= hours * (60 * 60 * 1000);
-//                        long minutes = diff / (60 * 1000);
-//                        diff -= minutes * (60 * 1000);
-//                        long seconds = diff / 1000;
-//                        binding.txtTimerDay.setText("" + String.format("%02d", days));
-//                        binding.txtTimerHour.setText("" + String.format("%02d", hours));
-//                        binding.txtTimerMinute.setText("" + String.format("%02d", minutes));
-//                        binding.txtTimerSecond.setText("" + String.format("%02d", seconds));
-//                    } else {
-//                        Toast.makeText(getContext(), "کنکور دادی رفت !", Toast.LENGTH_SHORT).show();
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        handler.postDelayed(runnable, 1000);
-//    }
-
 
 }
+
+
+

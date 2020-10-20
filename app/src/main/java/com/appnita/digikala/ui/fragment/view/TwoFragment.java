@@ -67,10 +67,6 @@ public class TwoFragment extends Fragment {
 
         PlayFragment.newInstance(postsItem).show(transaction, "dialog_playback");
 
-//        View view = getLayoutInflater().inflate(R.layout.fragment_play, null);
-//        BottomSheetDialog dialog = new BottomSheetDialog(getContext());
-//        dialog.setContentView(view);
-//        dialog.show();
     }
 
     private void getPermission() {

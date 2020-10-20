@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:fullBackupContent="@xml/backup_descriptor"
@@ -55,6 +56,9 @@
                     tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
+
+        <service android:name=".StopwatchService" />
+
     </application>
 
 </manifest>

@@ -1,7 +1,11 @@
 package com.appnita.digikala.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
@@ -12,65 +16,58 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.appnita.digikala.R;
+import com.appnita.digikala.StopwatchService;
 import com.appnita.digikala.databinding.FragmentHomeBinding;
-import com.appnita.digikala.extraApp.Darsad;
-import com.appnita.digikala.adapter.RecyclerAdapterClass;
-import com.appnita.digikala.adapter.RecyclerAdapterConsult;
-import com.appnita.digikala.adapter.RecyclerAdapterNews;
-import com.appnita.digikala.ui.RecyclerObjectClass;
-import com.appnita.digikala.retrofit.retrofit.ApiService;
-import com.appnita.digikala.retrofit.retrofit.NewsRetrofit;
-import com.appnita.digikala.retrofit.retrofit.RetrofitSetting;
-import com.appnita.digikala.retrofit.room.PostsDao;
-import com.appnita.digikala.retrofit.room.PostsDatabase;
-import com.appnita.digikala.ui.slider.SliderItem;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.ethanhua.skeleton.RecyclerViewSkeletonScreen;
-import com.ethanhua.skeleton.Skeleton;
+
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class HomeFragment extends Fragment {
 
     FragmentHomeBinding binding;
-    private Handler handler;
-    RecyclerViewSkeletonScreen skeletonScreen1, skeletonScreen2, skeletonScreen3;
+    TextView textViewTimer = null;
+    Button buttonStart, buttonStop;
+    LineDataSet set1;
+    ArrayList<Entry> values = new ArrayList<>();
+    LineData data;
 
-    final static int OFF_SET = 700;
+    SharedPreferences sharedPreferences;
+    long section;
+    float time;
 
-
-    PostsDao postsDao;
+    Entry e1;
+    Entry e2;
+    Entry e3;
+    Entry e4;
+    Entry e5;
+    Entry e6;
+    Entry e7;
+    Entry e8;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater);
         return binding.getRoot();
@@ -78,20 +75,130 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Toast.makeText(getContext(), "hi new page", Toast.LENGTH_SHORT).show();
         mpchart();
 
-        Animation anim1 = AnimationUtils.loadAnimation(getContext() , R.anim.chart_anim);
-        anim1.setDuration(700);
-        anim1.setStartOffset(OFF_SET);
-        binding.cardView3.setAnimation(anim1);
+        textViewTimer = view.findViewById(R.id.textViewTimer);
+        buttonStart = view.findViewById(R.id.buttonStart);
+        buttonStop = view.findViewById(R.id.buttonStop);
 
-        Animation anim2 = AnimationUtils.loadAnimation(getContext() , R.anim.chart_anim);
-        anim2.setDuration(1300);
-        anim2.setStartOffset(OFF_SET);
-        binding.cardView.setAnimation(anim2);
-        binding.cardView2.setAnimation(anim2);
+        firstTime();
+
+
+        sharedPreferences = getContext().getSharedPreferences("time", MODE_PRIVATE);
+
+        buttonStart.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), StopwatchService.class);
+            ContextCompat.startForegroundService(getContext(), intent);
+            sharedPreferences.edit().putFloat("sectionTime1", time).apply();
+        });
+
+        buttonStop.setOnClickListener(v -> {
+            getContext().stopService(new Intent(getContext(), StopwatchService.class));
+
+            sharedPreferences.edit().putFloat("time", time).apply();
+            sharedPreferences.edit().putFloat("sectionTime2", time).apply();
+
+            section = (long) getContext().getSharedPreferences("time", MODE_PRIVATE).getFloat("sectionTime2", 0)
+                    - (long) getContext().getSharedPreferences("time", MODE_PRIVATE).getFloat("sectionTime1", 0);
+
+            binding.chart.removeAllViews();
+            set1.clear();
+            data.clearValues();
+
+            e1 = e2;
+            sharedPreferences.edit().putInt("x1", (int) e1.getY()).apply();
+            e2 = e3;
+            sharedPreferences.edit().putInt("x2", (int) e2.getY()).apply();
+            e3 = e4;
+            sharedPreferences.edit().putInt("x3", (int) e3.getY()).apply();
+            e4 = e5;
+            sharedPreferences.edit().putInt("x4", (int) e4.getY()).apply();
+            e5 = e6;
+            sharedPreferences.edit().putInt("x5", (int) e5.getY()).apply();
+            e6 = e7;
+            sharedPreferences.edit().putInt("x6", (int) e6.getY()).apply();
+            e7 = e8;
+            sharedPreferences.edit().putInt("x7" , (int) e7.getY()).apply();
+
+            e8 = new Entry(7, ((int) ((time/1000)/60)));
+            sharedPreferences.edit().putInt("x8" , (int) e8.getY()).apply();
+
+            mpchart();
+        });
     }
+
+    private final BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent);
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getContext().registerReceiver(br, new IntentFilter(StopwatchService.STOPWATCH_BR));
+    }
+
+    @Override
+    public void onStop() {
+        getContext().unregisterReceiver(br);
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+            String hours = intent.getStringExtra("hours");
+            String minutes = intent.getStringExtra("minutes");
+            String seconds = intent.getStringExtra("seconds");
+            time = intent.getFloatExtra("time", 0);
+            textViewTimer.setText(hours + " : " + minutes + " : " + seconds);
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void firstTime() {
+        time = getContext().getSharedPreferences("time", MODE_PRIVATE).getFloat("time", 0);
+        long secs = (long) (time / 1000) % 60;
+        long mins = (long) ((time / 1000) / 60) % 60;
+        long hrs = (long) (((time / 1000) / 60) / 60);
+
+        secs = secs % 60;
+        String seconds = String.valueOf(secs);
+        if (secs == 0) {
+            seconds = "00";
+        }
+        if (secs < 10 && secs > 0) {
+            seconds = "0" + seconds;
+        }
+
+        /* Convert the minutes to String and format the String */
+        mins = mins % 60;
+        String minutes = String.valueOf(mins);
+        if (mins == 0) {
+            minutes = "00";
+        }
+        if (mins < 10 && mins > 0) {
+            minutes = "0" + minutes;
+        }
+
+        /* Convert the hours to String and format the String */
+        String hours = String.valueOf(hrs);
+        if (hrs == 0) {
+            hours = "00";
+        }
+        if (hrs < 10 && hrs > 0) {
+            hours = "0" + hours;
+        }
+        textViewTimer.setText(hours + " : " + minutes + " : " + seconds);
+    }
+
 
     private void mpchart() {
         binding.chart.setBackgroundColor(Color.WHITE);
@@ -100,7 +207,7 @@ public class HomeFragment extends Fragment {
         binding.chart.getDescription().setEnabled(false);
 
         // enable touch gestures
-        binding.chart.setTouchEnabled(true);
+        binding.chart.setTouchEnabled(false);
 
         // set listeners
 //        binding.chart.setOnChartValueSelectedListener(this);
@@ -139,15 +246,38 @@ public class HomeFragment extends Fragment {
         }
 
 
-        ArrayList<Entry> values = new ArrayList<>();
+//        for (int i = 0; i < 20; i++) {
+////            float val = (float) (Math.random() * 20);
+//            values.add(new Entry(0, 5));
+//            values.add(new Entry(1, 15));
+//        }
+        int x1 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x1", 0);
+        e1 = new Entry(0, x1);
+        int x2 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x2", 0);
+        e2 = new Entry(1, x2);
+        int x3 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x3", 0);
+        e3 = new Entry(2, x3);
+        int x4 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x4", 0);
+        e4 = new Entry(3, x4);
+        int x5 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x5", 0);
+        e5 = new Entry(4, x5);
+        int x6 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x6", 0);
+        e6 = new Entry(5, x6);
+        int x7 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x7", 0);
+        e7 = new Entry(6, x7);
+        int x8 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x8", 0);
+        e8 = new Entry(7, x8);
 
-        for (int i = 0; i < 20; i++) {
+        values.add(e1);
+        values.add(e2);
+        values.add(e3);
+        values.add(e4);
+        values.add(e5);
+        values.add(e6);
+        values.add(e7);
+        values.add(e8);
 
-            float val = (float) (Math.random() * 20);
-            values.add(new Entry(i, val));
-        }
-
-        LineDataSet set1 = new LineDataSet(values, "DataSet 1");
+        set1 = new LineDataSet(values, "آخرین مقاومت های مطالعاتی شما برای مطالعه :)");
 
         set1.setDrawIcons(false);
 
@@ -159,7 +289,7 @@ public class HomeFragment extends Fragment {
         set1.setCircleColor(Color.BLACK);
 
         // line thickness and point size
-        set1.setLineWidth(1f);
+        set1.setLineWidth(0f);
         set1.setCircleRadius(3f);
 
         // draw points as solid circles
@@ -178,12 +308,7 @@ public class HomeFragment extends Fragment {
 
         // set the filled area
         set1.setDrawFilled(true);
-        set1.setFillFormatter(new IFillFormatter() {
-            @Override
-            public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
-                return binding.chart.getAxisLeft().getAxisMinimum();
-            }
-        });
+        set1.setFillFormatter((dataSet, dataProvider) -> binding.chart.getAxisLeft().getAxisMinimum());
 
         // set color of filled area
         if (Utils.getSDKInt() >= 18) {
@@ -198,149 +323,18 @@ public class HomeFragment extends Fragment {
         dataSets.add(set1); // add the data sets
 
         // create a data object with the data sets
-        LineData data = new LineData(dataSets);
+        data = new LineData(dataSets);
 
         // set data
         binding.chart.setData(data);
 
-        Animation anim1 = AnimationUtils.loadAnimation(getContext() , R.anim.chart_anim);
-        anim1.setDuration(1000);
-        anim1.setStartOffset(OFF_SET);
-        binding.chart.startAnimation(anim1);
-//        binding.chart.
+        binding.chart.animate().setDuration(2000);
+        binding.chart.animate().start();
+
     }
-
-//    private void RetrofitConfiguration() {
-//        //server config
-//        RetrofitSetting retrofit = new RetrofitSetting("https://www.group2080.ir/api/");
-//        ApiService apiService = retrofit.getApiService();
-//
-//
-//        Call<NewsRetrofit> call = apiService.news();
-//        call.enqueue(new Callback<NewsRetrofit>() {
-//            @Override
-//            public void onResponse(Call<NewsRetrofit> call, Response<NewsRetrofit> response) {
-//                if (response.isSuccessful()) {
-//                    assert response.body() != null;
-//                    List<NewsRetrofit.posts> list = response.body().getNews();
-//
-//
-//
-//                    if (postsDao.getAllPosts().size() == 0) {
-//                        for (int i = list.size() - 1; i >= 0; i--) {//
-//                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-//                            rvOBJ.setTitle(list.get(i).getTitle());
-//                            rvOBJ.setContent(list.get(i).getContent());
-//                            rvOBJ.setImage(list.get(i).getThumbnail());
-//                            rvOBJ.setUrl(list.get(i).getUrl());
-//                            rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
-//                            postsDao.insert(rvOBJ);
-//                        }
-//                    }
-//
-//                    Log.d("test1", "onResponse: "+list.get(list.size() - 1).getTitle());
-//                    Log.d("test2", "onResponse: "+postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle());
-//
-//                    if (!list.get(list.size() - 1).getTitle().equals
-//                            (postsDao.getAllPosts().get(postsDao.getAllPosts().size() - 1).getTitle())) {
-//
-//                        postsDao.deleteall();
-//                        for (int i = list.size() - 1; i >= 0; i--) {
-//                            RecyclerObjectClass rvOBJ = new RecyclerObjectClass();
-//                            rvOBJ.setTitle(list.get(i).getTitle());
-//                            rvOBJ.setContent(list.get(i).getContent());
-//                            rvOBJ.setImage(list.get(i).getThumbnail());
-//                            rvOBJ.setUrl(list.get(i).getUrl());
-//                            rvOBJ.setCategory(list.get(i).getCategories().get(0).getId());
-//                            Log.d("categorys", "onResponse: " + list.get(i).getCategories().get(0).getId());
-//                            postsDao.insert(rvOBJ);
-//                        }
-//                    }
-//
-//
-//                    skeletonScreen3.hide();
-//                    //slider
-//                    List<SliderItem> list2 = new ArrayList<>();
-//                    for (int i = 0; i < postsDao.getCategoraizedPosts(398).size(); i++) {
-//                        list2.add(new SliderItem(postsDao.getCategoraizedPosts(398).get(i).getTitle()
-//                                , postsDao.getCategoraizedPosts(398).get(i).getImage()));
-//                    }
-//                    slider(list2);
-//
-//                    RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
-//                    Log.d("categorys", "onResponse: "+postsDao.getCategoraizedPosts(398).size());
-//                    RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
-//                    RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<NewsRetrofit> call, Throwable t) {
-//                skeletonScreen3.hide();
-//                RecyclerViewConfiqurationNews(postsDao.getCategoraizedPosts(393));
-//                RecyclerViewConfiqurationConsult(postsDao.getCategoraizedPosts(388));
-//                RecyclerViewConfiqurationClass(postsDao.getCategoraizedPosts(394));
-//            }
-//
-//        });
-//    }
-//
-//    private void RecyclerViewConfiqurationNews(List<RecyclerObjectClass> list) {
-//        RecyclerAdapterNews adapter = new RecyclerAdapterNews(getContext(), list);
-//        binding.rvNews.setAdapter(adapter);
-//
-//    }
-//
-//    private void RecyclerViewConfiqurationConsult(List<RecyclerObjectClass> list) {
-//        RecyclerAdapterConsult adapter = new RecyclerAdapterConsult(getContext(), list);
-//        binding.rvConsult.setAdapter(adapter);
-//    }
-//
-//    private void RecyclerViewConfiqurationClass(List<RecyclerObjectClass> list) {
-//        RecyclerAdapterClass adapter = new RecyclerAdapterClass(getContext(), list);
-//        binding.rvClass.setAdapter(adapter);
-//    }
-
-//    public void countDownStart() {
-//        handler = new Handler();
-//        // Please here set your event date//YYYY-MM-DD
-//        Runnable runnable = new Runnable() {
-//            @SuppressLint({"DefaultLocale", "SetTextI18n"})
-//            @Override
-//            public void run() {
-//                handler.postDelayed(this, 1000);
-//                try {
-//                    @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(
-//                            "yyyy-MM-dd");
-//                    // Please here set your event date//YYYY-MM-DD
-//                    Date futureDate;
-//                    futureDate = dateFormat.parse("2021-6-2");
-//                    Date currentDate = new Date();
-//                    if (!currentDate.after(futureDate)) {
-//                        assert futureDate != null;
-//                        long diff = (futureDate.getTime() + (8 * 60 * 60 * 1000))
-//                                - currentDate.getTime();
-//                        long days = diff / (24 * 60 * 60 * 1000);
-//                        diff -= days * (24 * 60 * 60 * 1000);
-//                        long hours = diff / (60 * 60 * 1000);
-//                        diff -= hours * (60 * 60 * 1000);
-//                        long minutes = diff / (60 * 1000);
-//                        diff -= minutes * (60 * 1000);
-//                        long seconds = diff / 1000;
-//                        binding.txtTimerDay.setText("" + String.format("%02d", days));
-//                        binding.txtTimerHour.setText("" + String.format("%02d", hours));
-//                        binding.txtTimerMinute.setText("" + String.format("%02d", minutes));
-//                        binding.txtTimerSecond.setText("" + String.format("%02d", seconds));
-//                    } else {
-//                        Toast.makeText(getContext(), "کنکور دادی رفت !", Toast.LENGTH_SHORT).show();
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        handler.postDelayed(runnable, 1000);
-//    }
 
 
 }
+
+
+
