@@ -57,7 +57,10 @@ public class TwoFragment extends Fragment {
 
         callBtn();
 
-
+        binding.instagramBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/group2080_ir/"));
+            startActivity(intent);
+        });
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
@@ -76,6 +79,7 @@ public class TwoFragment extends Fragment {
         FragmentTransaction transaction = ((FragmentActivity) getContext())
                 .getSupportFragmentManager()
                 .beginTransaction();
+
 
         PlayFragment.newInstance(postsItem).show(transaction, "dialog_playback");
 

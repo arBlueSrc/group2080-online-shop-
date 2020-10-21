@@ -91,7 +91,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_name" />
 
     <ImageView
-        android:id="@+id/imageView9"
+        android:id="@+id/instagram_btn2"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="24dp"
@@ -108,7 +108,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/textView39"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView9" />
+        app:layout_constraintTop_toTopOf="@+id/instagram_btn2" />
 
     <TextView
         android:id="@+id/textView39"
@@ -118,19 +118,19 @@
         android:text="اینستاگرام ۲۰۸۰"
         android:textColor="@android:color/black"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView9"
-        app:layout_constraintStart_toStartOf="@+id/imageView9"
-        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+        app:layout_constraintEnd_toEndOf="@+id/instagram_btn2"
+        app:layout_constraintStart_toStartOf="@+id/instagram_btn2"
+        app:layout_constraintTop_toBottomOf="@+id/instagram_btn2" />
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/telegram_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/ic_telegram"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+        app:layout_constraintBottom_toBottomOf="@+id/instagram_btn2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/view6"
-        app:layout_constraintTop_toTopOf="@+id/imageView9" />
+        app:layout_constraintTop_toTopOf="@+id/instagram_btn2" />
 
     <TextView
         android:id="@+id/textView40"
@@ -139,8 +139,8 @@
         android:text="تلگرام ۲۰۸۰"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/textView39"
-        app:layout_constraintEnd_toEndOf="@+id/imageView10"
-        app:layout_constraintStart_toStartOf="@+id/imageView10"
+        app:layout_constraintEnd_toEndOf="@+id/telegram_btn"
+        app:layout_constraintStart_toStartOf="@+id/telegram_btn"
         app:layout_constraintTop_toTopOf="@+id/textView39" />
 
     <View

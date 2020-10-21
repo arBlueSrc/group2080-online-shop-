@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
 
-    <data>
-
-
-    </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+    android:background="@color/skeleton"
         tools:context=".ui.fragment.ThreeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white">
+            >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_story"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                tools:listitem="@layout/layout_story_podcast"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +27,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView5"
+                android:id="@+id/instagram_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -81,32 +78,16 @@
                 android:id="@+id/textView28"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:text="@string/ad_title"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView30"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="@string/moshaver_ad_article"
-                android:textSize="18sp"
-                android:visibility="visible"
-                android:fontFamily="@font/font3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
@@ -124,7 +105,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView5">
+                app:layout_constraintTop_toBottomOf="@+id/instagram_btn">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -138,7 +119,7 @@
                         android:layout_marginLeft="24dp"
                         android:layout_marginEnd="24dp"
                         android:layout_marginRight="24dp"
-                        android:text="برای صحبت با مشاور و کسب اطلاعات بیشتر لطفا رو دکمه زیر کلیک کرده و دکمه ارسال را بزنید تا بطور مستقیم با مشاور صحبت کنید."
+                        android:text="@string/frag_two_call_to_consult"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -164,4 +145,3 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-</layout>

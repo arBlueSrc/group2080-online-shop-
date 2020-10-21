@@ -14,7 +14,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 import android.view.LayoutInflater;
@@ -47,8 +49,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class HomeFragment extends Fragment {
 
     FragmentHomeBinding binding;
-    TextView textViewTimer = null;
-    Button buttonStart, buttonStop;
     LineDataSet set1;
     ArrayList<Entry> values = new ArrayList<>();
     LineData data;
@@ -57,14 +57,8 @@ public class HomeFragment extends Fragment {
     long section;
     float time;
 
-    Entry e1;
-    Entry e2;
-    Entry e3;
-    Entry e4;
-    Entry e5;
-    Entry e6;
-    Entry e7;
-    Entry e8;
+    Entry e1,e2,e3,e4,e5,e6,e7,e8;
+
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -77,54 +71,57 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mpchart();
 
-        textViewTimer = view.findViewById(R.id.textViewTimer);
-        buttonStart = view.findViewById(R.id.buttonStart);
-        buttonStop = view.findViewById(R.id.buttonStop);
-
         firstTime();
-
 
         sharedPreferences = getContext().getSharedPreferences("time", MODE_PRIVATE);
 
-        buttonStart.setOnClickListener(v -> {
+        binding.buttonStart.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), StopwatchService.class);
             ContextCompat.startForegroundService(getContext(), intent);
             sharedPreferences.edit().putFloat("sectionTime1", time).apply();
         });
 
-        buttonStop.setOnClickListener(v -> {
+        binding.buttonStop.setOnClickListener(v -> {
             getContext().stopService(new Intent(getContext(), StopwatchService.class));
 
-            sharedPreferences.edit().putFloat("time", time).apply();
-            sharedPreferences.edit().putFloat("sectionTime2", time).apply();
-
-            section = (long) getContext().getSharedPreferences("time", MODE_PRIVATE).getFloat("sectionTime2", 0)
-                    - (long) getContext().getSharedPreferences("time", MODE_PRIVATE).getFloat("sectionTime1", 0);
-
-            binding.chart.removeAllViews();
-            set1.clear();
-            data.clearValues();
-
-            e1 = e2;
-            sharedPreferences.edit().putInt("x1", (int) e1.getY()).apply();
-            e2 = e3;
-            sharedPreferences.edit().putInt("x2", (int) e2.getY()).apply();
-            e3 = e4;
-            sharedPreferences.edit().putInt("x3", (int) e3.getY()).apply();
-            e4 = e5;
-            sharedPreferences.edit().putInt("x4", (int) e4.getY()).apply();
-            e5 = e6;
-            sharedPreferences.edit().putInt("x5", (int) e5.getY()).apply();
-            e6 = e7;
-            sharedPreferences.edit().putInt("x6", (int) e6.getY()).apply();
-            e7 = e8;
-            sharedPreferences.edit().putInt("x7" , (int) e7.getY()).apply();
-
-            e8 = new Entry(7, ((int) ((time/1000)/60)));
-            sharedPreferences.edit().putInt("x8" , (int) e8.getY()).apply();
-
+            updateChartData();
             mpchart();
         });
+
+        binding.btnInfo.setOnClickListener(v -> {
+            DialogFragment newFragment = ChartInfoFragment.newInstance();
+            newFragment.show(getFragmentManager(), "dialog");
+        });
+    }
+
+    private void updateChartData() {
+        sharedPreferences.edit().putFloat("time", time).apply();
+        sharedPreferences.edit().putFloat("sectionTime2", time).apply();
+
+        section = (long) getContext().getSharedPreferences("time", MODE_PRIVATE).getFloat("sectionTime2", 0)
+                - (long) getContext().getSharedPreferences("time", MODE_PRIVATE).getFloat("sectionTime1", 0);
+
+        binding.chart.removeAllViews();
+        set1.clear();
+        data.clearValues();
+
+        e1 = e2;
+        sharedPreferences.edit().putInt("x1", (int) e1.getY()).apply();
+        e2 = e3;
+        sharedPreferences.edit().putInt("x2", (int) e2.getY()).apply();
+        e3 = e4;
+        sharedPreferences.edit().putInt("x3", (int) e3.getY()).apply();
+        e4 = e5;
+        sharedPreferences.edit().putInt("x4", (int) e4.getY()).apply();
+        e5 = e6;
+        sharedPreferences.edit().putInt("x5", (int) e5.getY()).apply();
+        e6 = e7;
+        sharedPreferences.edit().putInt("x6", (int) e6.getY()).apply();
+        e7 = e8;
+        sharedPreferences.edit().putInt("x7" , (int) e7.getY()).apply();
+
+        e8 = new Entry(7, ((int) ((section/1000)/60)));
+        sharedPreferences.edit().putInt("x8" , (int) e8.getY()).apply();
     }
 
     private final BroadcastReceiver br = new BroadcastReceiver() {
@@ -158,15 +155,15 @@ public class HomeFragment extends Fragment {
             String minutes = intent.getStringExtra("minutes");
             String seconds = intent.getStringExtra("seconds");
             time = intent.getFloatExtra("time", 0);
-            textViewTimer.setText(hours + " : " + minutes + " : " + seconds);
+            binding.textViewTimer.setText(hours + " : " + minutes + " : " + seconds);
         }
     }
 
     @SuppressLint("SetTextI18n")
     public void firstTime() {
         time = getContext().getSharedPreferences("time", MODE_PRIVATE).getFloat("time", 0);
-        long secs = (long) (time / 1000) % 60;
-        long mins = (long) ((time / 1000) / 60) % 60;
+        long secs = (long) (time / 1000) ;
+        long mins = (long) ((time / 1000) / 60) ;
         long hrs = (long) (((time / 1000) / 60) / 60);
 
         secs = secs % 60;
@@ -196,7 +193,7 @@ public class HomeFragment extends Fragment {
         if (hrs < 10 && hrs > 0) {
             hours = "0" + hours;
         }
-        textViewTimer.setText(hours + " : " + minutes + " : " + seconds);
+        binding.textViewTimer.setText(hours + " : " + minutes + " : " + seconds);
     }
 
 
@@ -231,7 +228,8 @@ public class HomeFragment extends Fragment {
         }
 
         YAxis yAxis;
-        {   // // Y-Axis Style // //
+        {
+            // // Y-Axis Style // //
             yAxis = binding.chart.getAxisLeft();
 
             // disable dual axis (only use LEFT axis)
@@ -241,16 +239,10 @@ public class HomeFragment extends Fragment {
             yAxis.enableGridDashedLine(10f, 10f, 0f);
 
             // axis range
-            yAxis.setAxisMaximum(20f);
+            yAxis.setAxisMaximum(180f);
             yAxis.setAxisMinimum(0f);
         }
 
-
-//        for (int i = 0; i < 20; i++) {
-////            float val = (float) (Math.random() * 20);
-//            values.add(new Entry(0, 5));
-//            values.add(new Entry(1, 15));
-//        }
         int x1 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x1", 0);
         e1 = new Entry(0, x1);
         int x2 = getContext().getSharedPreferences("time", MODE_PRIVATE).getInt("x2", 0);

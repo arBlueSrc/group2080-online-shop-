@@ -98,9 +98,20 @@ public class FiveFragment extends Fragment {
         });
 
         RetrofitConfig();
+
+        binding.instagramBtn2.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/group2080_ir/"));
+            startActivity(intent);
+        });
+
+        binding.telegramBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/GROUP2080"));
+            startActivity(intent);
+        });
+
+
+
         return binding.getRoot();
-
-
     }
 
 

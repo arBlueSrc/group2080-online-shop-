@@ -102,7 +102,6 @@ public class PlayFragment extends BottomSheetDialogFragment {
                 .into(binding.imgBtmsheet);
         try {
           mediaPlayer.setDataSource(postsItem.getContent().substring(53,postsItem.getContent().indexOf("mp3")+3));
-//            mediaPlayer.setDataSource("https://dl.nex1music.ir/1399/07/09/Arash%20Rabiei%20-%20Aroomam%20Ba%20To%20[128].mp3?time=1601481409&filename=/1399/07/09/Arash%20Rabiei%20-%20Aroomam%20Ba%20To%20[128].mp3");
 
         } catch (IOException e) {
             Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
@@ -115,21 +114,13 @@ public class PlayFragment extends BottomSheetDialogFragment {
 
 
         binding.seekBar.setMax(mediaPlayer.getDuration());
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                setupViews();
-            }
-        });
+        mediaPlayer.setOnPreparedListener(mp -> setupViews());
 
 
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mediaPlayer.stop();
-                binding.seekBar.setProgress(0);
-                binding.btnPlay.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause, null));
-            }
+        mediaPlayer.setOnCompletionListener(mp -> {
+            mediaPlayer.stop();
+            binding.seekBar.setProgress(0);
+            binding.btnPlay.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause, null));
         });
     }
 
@@ -189,12 +180,9 @@ public class PlayFragment extends BottomSheetDialogFragment {
 
         @Override
         public void run() {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    binding.seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                    binding.txtNowTime.setText(getStringTime(mediaPlayer.getCurrentPosition()));
-                }
+            getActivity().runOnUiThread(() -> {
+                binding.seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                binding.txtNowTime.setText(getStringTime(mediaPlayer.getCurrentPosition()));
             });
         }
     }

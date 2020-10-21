@@ -66,7 +66,7 @@
     <string name="channel_description">description for notif</string>
     <string name="channel_name">name for notif</string>
     <string name="bottom_menu_5">۲۰۸۰ من</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chart_info">در نرم افزار ۲۰۸۰ شما میتوانید مجموع ساعت مطالعاتی خود را ببنید. وقتی شروع به مطالعه کردید دکمه شروع و وقتی که زمان مطالعه شما به پایان رسید دکمه پایان را بزنید. در این زمان اخرین زمان مطالعاتی شما به نمودار اضاقه خواهد شد. دقت کنید زمان ها به دقیقه وارد نمودار میشوند.تا زمانیکه نوتیفیکیشن نرم افزار در نوتیفیکیشن بار نمایش داده میشود تایمر در حال کار کردن است و برای توقف باید وارد نرم افزار شوید و دکمه توقف را کلیک کنید. موفق باشید.</string>
+    <string name="frag_two_call_to_consult">برای صحبت با مشاور و کسب اطلاعات بیشتر لطفا رو دکمه زیر کلیک کرده و دکمه ارسال را بزنید تا بطور مستقیم با مشاور صحبت کنید.</string>
 
 </resources>
